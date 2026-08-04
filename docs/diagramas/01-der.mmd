@@ -1,0 +1,111 @@
+erDiagram
+    ORGANIZATIONS ||--o{ BRANCHES : possui
+    ORGANIZATIONS ||--o{ USERS : emprega
+    BRANCHES     ||--o{ USERS : lotado_em
+
+    USERS ||--o{ MOOD_CHECKINS : registra
+    USERS ||--o{ XP_EVENTS : acumula
+    USERS ||--o{ USER_COMPETENCIES : declara
+    USERS ||--o{ CAREER_PLANS : segue
+    USERS ||--o{ USER_BADGES : conquista
+
+    CAREER_PLANS      ||--o{ CAREER_PLAN_STEPS : composto_por
+    CAREER_PLAN_STEPS ||--o| USER_BADGES : concede
+    BADGES            ||--o{ USER_BADGES : referencia
+
+    ORGANIZATIONS ||--o{ FEEDBACKS : recebe
+    USERS         ||--o{ FEEDBACKS : envia_identificado
+
+    ORGANIZATIONS {
+        bigint id PK
+        string name
+        string timezone
+        timestamp created_at
+    }
+
+    BRANCHES {
+        bigint id PK
+        bigint organization_id FK
+        string name
+    }
+
+    USERS {
+        bigint id PK
+        bigint organization_id FK
+        bigint branch_id FK
+        string name
+        string email
+        string password_hash
+        enum   role "admin|gestor|colaborador"
+    }
+
+    MOOD_CHECKINS {
+        bigint id PK
+        bigint organization_id FK
+        bigint branch_id FK
+        bigint user_id FK
+        smallint mood "1|2|3"
+        date   checkin_date "UNIQUE(user_id, checkin_date)"
+        timestamp created_at
+    }
+
+    XP_EVENTS {
+        bigint id PK
+        bigint organization_id FK
+        bigint user_id FK
+        enum   source "checkin|streak|goal|ppc_step"
+        int    points
+        bigint reference_id "polimorfico, nullable"
+        timestamp created_at
+    }
+
+    FEEDBACKS {
+        bigint id PK
+        bigint organization_id FK
+        bigint branch_id FK
+        bigint user_id FK "NULL quando anonimo - nunca gravado"
+        boolean is_anonymous
+        boolean is_urgent
+        text   message
+        timestamp created_at
+    }
+
+    CAREER_PLANS {
+        bigint id PK
+        bigint organization_id FK
+        bigint user_id FK
+        string title
+        enum   status "nao_iniciado|em_andamento|concluido"
+    }
+
+    CAREER_PLAN_STEPS {
+        bigint id PK
+        bigint career_plan_id FK
+        string title
+        int    order
+        int    xp_reward
+        timestamp completed_at "nullable"
+    }
+
+    USER_COMPETENCIES {
+        bigint id PK
+        bigint organization_id FK
+        bigint user_id FK
+        string name
+        enum   kind "habilidade|curso|certificacao"
+        enum   origin "autodeclarada|ppc"
+    }
+
+    BADGES {
+        bigint id PK
+        bigint organization_id FK
+        string name
+        string icon
+    }
+
+    USER_BADGES {
+        bigint id PK
+        bigint user_id FK
+        bigint badge_id FK
+        timestamp awarded_at
+    }

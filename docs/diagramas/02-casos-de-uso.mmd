@@ -1,0 +1,54 @@
+flowchart LR
+    COL(["👤 Colaborador"])
+    GES(["👤 Gestor"])
+    ADM(["👤 Administrador"])
+
+    subgraph ESCUTA["Escuta contínua"]
+        UC01["RF01 · Registrar check-in diário de humor"]
+        UC02["RF02 · Enviar feedback (identificado ou anônimo)"]
+    end
+
+    subgraph DESENV["Desenvolvimento individual"]
+        UC04["RF04 · Acumular XP e ofensivas"]
+        UC05["RF05 · Avançar no Plano de Progressão de Carreira"]
+        UC06["RF06 · Manter portfólio de competências"]
+    end
+
+    subgraph LIDER["Apoio à decisão"]
+        UC07["RF07 · Buscar colaborador por competência"]
+        UC08["RF08 · Consultar painel de indicadores agregados"]
+        UC12["Responder feedback"]
+    end
+
+    subgraph ADMIN["Administração"]
+        UC11["RF11 · Gerenciar usuários e papéis"]
+        UC13["Gerenciar filiais"]
+        UC14["Definir PPCs e emblemas"]
+        UC15["RF12 · Consultar ranking interno de participação<br/><b>exclusivo do Administrador</b>"]
+    end
+
+    COL --> UC01
+    COL --> UC02
+    COL --> UC04
+    COL --> UC05
+    COL --> UC06
+
+    GES --> UC07
+    GES --> UC08
+    GES --> UC12
+    GES --> UC14
+
+    ADM --> UC07
+    ADM --> UC08
+    ADM --> UC12
+    ADM --> UC11
+    ADM --> UC13
+    ADM --> UC14
+    ADM --> UC15
+
+    UC01 -.->|inclui| UC04
+    UC05 -.->|inclui| UC04
+    UC05 -.->|estende| UC06
+
+    classDef restrito fill:#332200,stroke:#f5b942,stroke-width:2px,color:#fff
+    class UC15 restrito

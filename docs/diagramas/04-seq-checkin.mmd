@@ -1,0 +1,40 @@
+sequenceDiagram
+    autonumber
+    actor C as Colaborador
+    participant F as React (SPA)
+    participant M as Middleware<br/>Sanctum + RBAC
+    participant CT as CheckinController
+    participant S as XpService
+    participant DB as PostgreSQL<br/>(Global Scope + RLS)
+
+    C->>F: seleciona humor (1, 2 ou 3)
+    F->>M: POST /api/v1/checkins {mood}<br/>Bearer token
+    M->>M: valida token e papel
+    M->>CT: requisição autorizada
+
+    CT->>CT: resolve a data local<br/>usando timezone da organização
+    CT->>DB: existe check-in para (user_id, checkin_date)?
+    DB-->>CT: não
+
+    CT->>DB: INSERT mood_checkins<br/>+ organization_id, branch_id
+    Note over DB: UNIQUE(user_id, checkin_date)<br/>protege contra requisição concorrente
+
+    CT->>S: registrarXp(user, origem: checkin)
+    S->>DB: houve check-in ontem?
+    DB-->>S: sim → ofensiva continua
+    S->>S: pontos = base × 2 (ofensiva ativa)
+    S->>DB: INSERT xp_events {source, points}
+
+    S-->>CT: {xp_ganho, ofensiva_dias, nivel}
+    CT-->>F: 201 Created
+    F-->>C: confirmação + XP e ofensiva atualizados
+
+    rect rgba(220,38,38,0.12)
+    Note over C,DB: Segunda tentativa no mesmo dia
+    C->>F: tenta novo check-in
+    F->>CT: POST /api/v1/checkins
+    CT->>DB: já existe para hoje?
+    DB-->>CT: sim
+    CT-->>F: 409 Conflict
+    F-->>C: "Você já registrou seu humor hoje."
+    end

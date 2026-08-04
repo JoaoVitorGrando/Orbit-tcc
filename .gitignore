@@ -1,0 +1,55 @@
+# ─── Laravel / back-end ───────────────────────────────
+/backend/vendor/
+/backend/node_modules/
+/backend/public/build/
+/backend/public/hot
+/backend/public/storage
+/backend/storage/*.key
+/backend/storage/app/public/*
+!/backend/storage/app/public/.gitkeep
+/backend/storage/framework/cache/*
+/backend/storage/framework/sessions/*
+/backend/storage/framework/views/*
+/backend/storage/logs/*
+/backend/bootstrap/cache/*
+/backend/.env
+/backend/.env.backup
+/backend/.env.production
+/backend/.phpunit.result.cache
+/backend/.phpunit.cache
+/backend/auth.json
+/backend/database/*.sqlite
+/backend/database/*.sqlite-journal
+
+# ─── React / front-end ────────────────────────────────
+/frontend/node_modules/
+/frontend/dist/
+/frontend/dist-ssr/
+/frontend/.env
+/frontend/.env.local
+/frontend/.env.*.local
+/frontend/*.local
+/frontend/.vite/
+
+# ─── Diagramas renderizados ───────────────────────────
+# Os .mmd sao a fonte e ficam versionados; os PNG sao gerados.
+/docs/diagramas/png/*
+!/docs/diagramas/png/.gitkeep
+
+# ─── Dados da pesquisa ────────────────────────────────
+# TCLEs assinados e respostas dos participantes NAO entram no repositorio.
+# Guarde em local seguro, fora do controle de versao.
+/docs/coleta/
+*.tcle.pdf
+respostas-sus*.xlsx
+
+# ─── Sistema operacional e editores ───────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+*.swo
+*~

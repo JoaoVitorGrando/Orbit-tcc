@@ -1,0 +1,25 @@
+flowchart TD
+    A["Registros identificados na busca<br/><b>n = 353</b>"] --> B{"CE1<br/>duplicados entre bases"}
+    B -->|"removidos: n = ?"| C["Registros únicos<br/><b>n = ?</b>"]
+
+    C --> D{"CI1 · CI2<br/>idioma (PT/EN)<br/>período (2024–2026)"}
+    D -->|"excluídos: n = ?"| E["Triados por título e resumo<br/><b>n = ?</b>"]
+
+    E --> F{"CI3<br/>alinhamento temático"}
+    F -->|"excluídos: n = ?"| G["Elegíveis para texto integral<br/><b>n = ?</b>"]
+
+    G --> H{"CE2 · CE3 · CE4<br/>restrito a grandes corporações<br/>texto inacessível<br/>método insuficiente"}
+    H -->|"excluídos: n = ?"| I["<b>Estudos incluídos<br/>n = 5</b>"]
+
+    I --> J["Siswanto et al. (2024)"]
+    I --> K["Obaid e Farooq (2024)"]
+    I --> L["Souza (2025)"]
+    I --> M["Scholz (2025)"]
+    I --> N["Abdulgalimov et al. (2020)*"]
+
+    N -.-> O["*fora do recorte temporal<br/>incluído por snowballing —<br/>justificar no texto"]
+
+    classDef inc fill:#003333,stroke:#80d4d4,stroke-width:2px,color:#fff
+    classDef nota fill:#332200,stroke:#f5b942,stroke-width:1px,color:#fff
+    class I inc
+    class O nota

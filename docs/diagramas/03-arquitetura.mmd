@@ -1,0 +1,28 @@
+flowchart TB
+    subgraph CLIENTE["Camada de apresentação — React + Vite + Tailwind"]
+        UI["Componentes de interface<br/>design system Orbit"]
+        RT["Proteção de rotas por papel<br/>ProtectedRoute"]
+        AX["Cliente HTTP (axios)<br/>token no header"]
+    end
+
+    subgraph SERVIDOR["Camada de regras de negócio — Laravel 11"]
+        MW1["Middleware: autenticação<br/>Laravel Sanctum"]
+        MW2["Middleware: RBAC<br/>admin | gestor | colaborador"]
+        CTRL["Controllers · API REST /api/v1"]
+        SRV["Services<br/>XpService · CheckinService · FeedbackService"]
+        SCOPE["🛡️ Camada 1 — Global Scope<br/>injeta organization_id e branch_id<br/>em toda query do Eloquent"]
+    end
+
+    subgraph BANCO["Camada de persistência — PostgreSQL"]
+        RLS["🛡️ Camada 2 — Row Level Security<br/>políticas por linha<br/>independentes da aplicação"]
+        TB[("Tabelas de negócio<br/>toda linha tem organization_id")]
+    end
+
+    UI --> RT --> AX
+    AX -->|"HTTPS + Bearer token"| MW1
+    MW1 --> MW2 --> CTRL --> SRV --> SCOPE
+    SCOPE -->|"SET app.current_org"| RLS
+    RLS --> TB
+
+    classDef defesa fill:#003333,stroke:#80d4d4,stroke-width:2px,color:#fff
+    class SCOPE,RLS defesa

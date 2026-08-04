@@ -1,0 +1,35 @@
+sequenceDiagram
+    autonumber
+    actor C as Colaborador
+    participant F as React (SPA)
+    participant M as Middleware<br/>Sanctum
+    participant CT as FeedbackController
+    participant DB as PostgreSQL
+
+    C->>F: escreve mensagem + marca "enviar anonimamente"
+    F->>M: POST /api/v1/feedbacks<br/>{message, is_anonymous: true}<br/>Bearer token
+
+    M->>M: autentica → identidade conhecida AQUI
+    M->>CT: request com auth()->user()
+
+    rect rgba(0,128,128,0.18)
+    Note over CT: PONTO DE DESCARTE DA IDENTIDADE
+    CT->>CT: is_anonymous === true?
+    CT->>CT: monta payload SEM a chave user_id<br/>organization_id e branch_id são mantidos<br/>(necessários para roteamento e RLS)
+    end
+
+    CT->>DB: INSERT feedbacks<br/>(organization_id, branch_id,<br/>is_anonymous, message)
+    Note over DB: coluna user_id permanece NULL<br/>não há log, hash ou referência<br/>a identidade não existe em lugar nenhum
+
+    DB-->>CT: id do registro
+    CT-->>F: 201 Created
+    F-->>C: "Feedback enviado anonimamente."
+
+    rect rgba(255,255,255,0.06)
+    Note over C,DB: Consulta posterior pela liderança
+    participant A as Administrador
+    A->>CT: GET /api/v1/feedbacks
+    CT->>DB: SELECT ... WHERE organization_id = ?
+    DB-->>CT: registros
+    CT-->>A: remetente exibido como "Anônimo"<br/>— não por ocultação na interface,<br/>mas por ausência do dado
+    end
