@@ -35,7 +35,7 @@ erDiagram
         bigint branch_id FK
         string name
         string email
-        string password_hash
+        string password
         enum   role "admin|gestor|colaborador"
     }
 
@@ -80,6 +80,7 @@ erDiagram
 
     CAREER_PLAN_STEPS {
         bigint id PK
+        bigint organization_id FK "denormalizado, exigido pela RLS"
         bigint career_plan_id FK
         string title
         int    order
@@ -105,6 +106,7 @@ erDiagram
 
     USER_BADGES {
         bigint id PK
+        bigint organization_id FK "denormalizado, exigido pela RLS"
         bigint user_id FK
         bigint badge_id FK
         timestamp awarded_at

@@ -13,8 +13,16 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('organization_id')->constrained()->cascadeOnDelete();
+            // Nullable: o Administrador pode não estar lotado em uma filial
+            // específica (supervisiona todas as filiais da organização).
+            // Gestor e Colaborador, na prática, sempre têm branch_id definido.
+            $table->foreignId('branch_id')->nullable()->constrained()->nullOnDelete();
             $table->string('name');
             $table->string('email')->unique();
+            // RF11 / RNF01: exatamente 3 papéis. Fixo por regra de negócio,
+            // não por catálogo extensível — não há tabela `roles`.
+            $table->enum('role', ['admin', 'gestor', 'colaborador'])->default('colaborador');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
