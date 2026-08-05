@@ -60,8 +60,8 @@ calendário do Trello mostrar o burndown.
 **📌 As 8 regras invioláveis**
 `P0 · Crítico`
 
-> Regras que governam o mês inteiro. Todas estão no `CLAUDE.md`, então a IA as aplica
-> sozinha — mas você precisa saber cobrá-las.
+> Regras que governam o mês inteiro. Todas estão no `CLAUDE.md`, e valem para todo o projeto, independentemente de quem
+> escreve o código.
 >
 > 1. Nenhuma linha entra no repositório sem que você consiga explicá-la em voz alta.
 > 2. Toda tabela de negócio nasce com `organization_id`, na primeira migration.
@@ -69,7 +69,7 @@ calendário do Trello mostrar o burndown.
 > 4. Ranking ordena por XP, jamais por humor. Visível só ao Administrador.
 > 5. Nada de recompensas ou resgates.
 > 6. RF03, RF09, RF10 e RF12 só depois dos essenciais.
-> 7. Code freeze em 21/08 às 23h.
+> 7. Code freeze em 22/08 às 23h.
 > 8. Item que não coube na sprint vira "trabalho futuro", não dívida.
 
 ---
@@ -134,7 +134,7 @@ calendário do Trello mostrar o burndown.
 
 ---
 
-### 🎯 Sprint 0 — Fundação e domínio · 28 a 30/07 — 5 cartões
+### 🎯 Sprint 0 — Fundação e domínio · 04 a 05/08 — 5 cartões
 
 > **Objetivo:** recuperar o controle do projeto. Nenhuma funcionalidade de negócio.
 > **Pronto quando:** você desenha o diagrama ER de memória, no papel.
@@ -142,7 +142,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **S0.1 — Inicializar repositório e arquivar o legado**
-`P0 · Crítico` · Entrega 28/07
+`P0 · Crítico` · Entrega 04/08
 
 > Repositório novo, separado do protótipo. O legado permanece intacto como referência
 > visual e fonte do design system — não se apaga.
@@ -161,7 +161,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **S0.2 — Subir Laravel 11 + Sanctum com PostgreSQL**
-`P0 · Crítico` · `Segurança e isolamento` · Entrega 28/07
+`P0 · Crítico` · `Segurança e isolamento` · Entrega 04/08
 
 > ```bash
 > composer create-project laravel/laravel backend
@@ -180,7 +180,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **S0.3 — Subir React + Vite + Tailwind e instalar o design system**
-`P1 · Essencial` · `Front-end` · Entrega 28/07
+`P1 · Essencial` · `Front-end` · Entrega 04/08
 
 > Criar o projeto Vite, instalar as dependências do protótipo, copiar os 4 arquivos de
 > `design-system/` e adicionar a fonte Poppins no `index.html`.
@@ -197,7 +197,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **S0.4 — Modelar os dados no papel e escrever as migrations**
-`P0 · Crítico` · `Segurança e isolamento` · Entrega 29/07
+`P0 · Crítico` · `Segurança e isolamento` · Entrega 05/08
 
 > **Desenhe à mão antes de rodar `make:migration`.** Use `docs/diagramas/01-der.mmd` como
 > ponto de partida — mas ele é uma hipótese, não verdade. Discordar dele faz parte de
@@ -218,7 +218,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **S0.5 — Seeders determinísticos**
-`P1 · Essencial` · Entrega 30/07
+`P1 · Essencial` · Entrega 05/08
 
 > 2 organizações, 3 filiais, ~20 usuários distribuídos entre os 3 papéis.
 >
@@ -232,7 +232,7 @@ calendário do Trello mostrar o burndown.
 
 ---
 
-### 🎯 Sprint 1 — Núcleo de segurança · 31/07 a 05/08 — 5 cartões
+### 🎯 Sprint 1 — Núcleo de segurança · 06 a 10/08 — 5 cartões
 
 > **A sprint mais importante do TCC.** Aqui mora a contribuição técnica declarada.
 > **Pronto quando:** o teste de defesa em profundidade passa.
@@ -240,7 +240,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **RF11 — Controle de acesso por 3 papéis (RBAC)**
-`P1 · Essencial` · `Segurança e isolamento` · Entrega 05/08
+`P1 · Essencial` · `Segurança e isolamento` · Entrega 07/08
 
 > Exatamente 3 papéis: `admin`, `gestor`, `colaborador`.
 >
@@ -256,7 +256,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **S1.2 — Autenticação Sanctum e proteção de rotas**
-`P1 · Essencial` · `Segurança e isolamento` · Entrega 05/08
+`P1 · Essencial` · `Segurança e isolamento` · Entrega 07/08
 
 > Login, logout, emissão e validação de token. `ProtectedRoute` no React redirecionando
 > por papel.
@@ -269,7 +269,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **RNF02 — Global Scope de isolamento (Camada 1)**
-`P0 · Crítico` · `Segurança e isolamento` · Entrega 03/08
+`P0 · Crítico` · `Segurança e isolamento` · Entrega 08/08
 
 > Global Scope no Eloquent injetando `organization_id` — e `branch_id` quando aplicável —
 > automaticamente em toda consulta.
@@ -284,7 +284,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **RNF03 — Row Level Security no PostgreSQL (Camada 2)**
-`P0 · Crítico` · `Segurança e isolamento` · Entrega 05/08
+`P0 · Crítico` · `Segurança e isolamento` · Entrega 10/08
 
 > ⭐ **O cartão mais importante do quadro.** É a contribuição técnica central do trabalho.
 >
@@ -303,7 +303,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **S1.5 — Teste de defesa em profundidade**
-`P0 · Crítico` · `Teste obrigatório` · Entrega 05/08
+`P0 · Crítico` · `Teste obrigatório` · Entrega 10/08
 
 > ⭐ **A evidência executável da tese do trabalho.**
 >
@@ -317,12 +317,12 @@ calendário do Trello mostrar o burndown.
 
 ---
 
-### 🎯 Sprint 2 — Escuta contínua · 06 a 11/08 — 3 cartões
+### 🎯 Sprint 2 — Escuta contínua · 11 a 15/08 — 3 cartões
 
 ---
 
 **RF01 — Check-in diário de humor**
-`P1 · Essencial` · Entrega 08/08
+`P1 · Essencial` · Entrega 13/08
 
 > Três níveis (feliz, neutro, triste), um registro por usuário por dia.
 >
@@ -342,7 +342,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **RF04 — Motor de XP, níveis e ofensivas**
-`P1 · Essencial` · Entrega 10/08
+`P1 · Essencial` · Entrega 14/08
 
 > 10 XP por check-in, 15 com ofensiva ativa (2+ dias consecutivos). Também pontua metas e
 > avanço no PPC.
@@ -360,7 +360,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **RF02 — Canal de feedback com anonimato técnico**
-`P0 · Crítico` · `Segurança e isolamento` · Entrega 11/08
+`P0 · Crítico` · `Segurança e isolamento` · Entrega 15/08
 
 > ⭐ Bidirecional, com opção de envio anônimo e marcação de urgente.
 >
@@ -381,12 +381,12 @@ calendário do Trello mostrar o burndown.
 
 ---
 
-### 🎯 Sprint 3 — Desenvolvimento individual · 12 a 17/08 — 3 cartões
+### 🎯 Sprint 3 — Desenvolvimento individual · 16 a 19/08 — 3 cartões
 
 ---
 
 **RF05 — Plano de Progressão de Carreira**
-`P1 · Essencial` · Entrega 14/08
+`P1 · Essencial` · Entrega 17/08
 
 > Plano com etapas, níveis e emblemas concedidos automaticamente ao concluir.
 >
@@ -400,7 +400,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **RF06 — Portfólio de competências**
-`P1 · Essencial` · Entrega 15/08
+`P1 · Essencial` · Entrega 18/08
 
 > Habilidades, formações e cursos autodeclarados no perfil. Emblemas do PPC entram
 > automaticamente, preservando o histórico.
@@ -412,7 +412,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **RF07 — Busca de colaboradores por competência**
-`P1 · Essencial` · `Segurança e isolamento` · Entrega 17/08
+`P1 · Essencial` · `Segurança e isolamento` · Entrega 19/08
 
 > ⚠️ **O detalhe sofisticado do sistema — e o mais delicado.**
 >
@@ -430,12 +430,12 @@ calendário do Trello mostrar o burndown.
 
 ---
 
-### 🎯 Sprint 4 — Painel e congelamento · 18 a 21/08 — 6 cartões
+### 🎯 Sprint 4 — Painel e congelamento · 20 a 22/08 — 6 cartões
 
 ---
 
 **RF08 — Painel de indicadores agregados**
-`P1 · Essencial` · `Segurança e isolamento` · Entrega 20/08
+`P1 · Essencial` · `Segurança e isolamento` · Entrega 21/08
 
 > Clima e engajamento por unidade. Gestor vê a própria filial; Administrador vê todas.
 >
@@ -448,7 +448,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **S4.2 — Polimento, responsividade e estados vazios**
-`P1 · Essencial` · `Front-end` · Entrega 21/08
+`P1 · Essencial` · `Front-end` · Entrega 22/08
 
 > RNF06: interface acessível de qualquer dispositivo. Mensagens de erro claras, estados
 > vazios, telas de carregamento.
@@ -459,7 +459,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **S4.3 — Seed de demonstração com 30 dias de histórico**
-`P1 · Essencial` · Entrega 21/08
+`P1 · Essencial` · Entrega 22/08
 
 > Histórico fictício para o painel não aparecer vazio durante o teste.
 >
@@ -469,7 +469,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **S4.4 — Finalizar Apêndices B, C e D**
-`P1 · Essencial` · `Artigo e banca` · Entrega 20/08
+`P1 · Essencial` · `Artigo e banca` · Entrega 21/08
 
 > Já escritos em `docs/apendices/`. Falta:
 > - [ ] Preencher os campos entre colchetes do TCLE (telefone, curso, e-mail do orientador)
@@ -481,7 +481,7 @@ calendário do Trello mostrar o burndown.
 ---
 
 **S4.5 — Confirmar os 8 voluntários**
-`P0 · Crítico` · `Prazo fixo` · Entrega 18/08
+`P0 · Crítico` · `Prazo fixo` · Entrega 20/08
 
 > **Convide 12 para garantir 8.** Sempre falta gente.
 >
@@ -491,12 +491,12 @@ calendário do Trello mostrar o burndown.
 > Não precisam entender de RH — simulam o papel dentro do sistema. Pode ser por chamada de
 > vídeo com compartilhamento de tela.
 >
-> **Este cartão deveria estar pronto desde 28/07.** Se ainda não convidou, faça hoje.
+> Convites devem começar no início do projeto, não no final da Sprint 4.
 
 ---
 
-**🔒 CODE FREEZE — 21/08 às 23h**
-`P0 · Crítico` · `Prazo fixo` · Entrega 21/08
+**🔒 CODE FREEZE — 22/08 às 23h**
+`P0 · Crítico` · `Prazo fixo` · Entrega 22/08
 
 > A partir daqui, **só correção de bug crítico**.
 >
@@ -511,7 +511,7 @@ calendário do Trello mostrar o burndown.
 
 ---
 
-### 🎯 Sprint 5 — Avaliação · 22 a 25/08 — 2 cartões
+### 🎯 Sprint 5 — Avaliação · 23 a 25/08 — 2 cartões
 
 ---
 
@@ -649,7 +649,7 @@ calendário do Trello mostrar o burndown.
 **RF12 — Ranking interno de participação**
 `P2 · Complementar` · `Segurança e isolamento`
 
-> Decidido em 28/07. Ordena **exclusivamente por XP acumulado**. Visível **apenas ao
+> Decidido em 04/08. Ordena **exclusivamente por XP acumulado**. Visível **apenas ao
 > `admin`** — gestor e colaborador recebem 403, com teste provando.
 >
 > **Nunca ordena, exibe ou deriva humor por colaborador.**
@@ -671,5 +671,5 @@ calendário do Trello mostrar o burndown.
 | 🎯 Sprints 0 a 5 + fechamento | 29 |
 | **Total** | **38** |
 
-**Manutenção:** eu atualizo o quadro no fechamento de cada sprint, a partir do que foi
-realmente commitado. Assim ele não mente — que é o risco de todo quadro de projeto solo.
+**Manutenção:** o quadro é atualizado no fechamento de cada sprint, a partir do que foi
+realmente commitado — nunca por expectativa.

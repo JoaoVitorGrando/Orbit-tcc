@@ -1,195 +1,184 @@
-# Como vamos trabalhar — Orbit RH
+# Processo de Desenvolvimento — Orbit RH
 
-Fluxo de trabalho para os 30 dias. Leia uma vez, consulte depois.
+Como o trabalho é organizado ao longo das sprints.
 
 ---
 
-## 1. A ideia central: o repositório é o cérebro
+## 1. Fonte única de verdade
 
-Você perguntou se vale usar uma ferramenta externa de memória. A resposta curta é **não
-precisa — você já tem uma, e ela é melhor.**
+O contexto do projeto vive versionado, junto do código, em vez de depender de memória
+ou de ferramentas externas:
 
-O que faz um "cérebro" funcionar é o contexto certo estar disponível na hora certa. No seu
-caso, isso já acontece:
-
-| Arquivo | Papel | Quando é lido |
+| Documento | Papel | Quando é consultado |
 |---|---|---|
-| `CLAUDE.md` | Regras, stack, escopo, decisões travadas | **Automaticamente, toda sessão** |
-| `docs/ESTUDO-DO-PRODUTO.md` | O produto inteiro explicado | Quando você ou eu precisamos |
-| `docs/PLANO-MESTRE-30-DIAS.md` | Cronograma e pendências do artigo | Início de cada sprint |
-| `DIARIO.md` | O que aconteceu e o que você não entendeu | Todo dia |
-| `git log` | O que foi feito, quando e por quê | Sempre |
+| `CLAUDE.md` | Regras de arquitetura, stack, escopo, convenções | No início de cada sessão de trabalho |
+| `docs/ESTUDO-DO-PRODUTO.md` | Especificação funcional e racional de produto | Sob demanda |
+| `docs/PLANO-MESTRE-30-DIAS.md` | Cronograma, riscos e pendências | Início de cada sprint |
+| `DIARIO.md` | Decisões técnicas e questões em aberto por dia | Diariamente |
+| Histórico do Git | O que foi feito, quando e por quê | Continuamente |
 
-Três vantagens que uma ferramenta externa não tem:
+Vantagens de manter o contexto no próprio repositório em vez de em uma ferramenta
+externa de anotações:
 
-- **Versionado.** Você vê o que mudou, quando e por quê. Memória externa não tem `diff`.
-- **Junto do código.** O contexto está a um diretório de distância do arquivo que ele
-  descreve. Não desatualiza sozinho.
-- **É o entregável.** O `docs/` vira apêndice do artigo. Um grafo de conhecimento externo
-  não vira nada.
+- **Versionado.** Toda mudança de decisão aparece no diff, com data e motivo.
+- **Colocado junto ao código.** A documentação de uma regra fica a um diretório de
+  distância do código que a implementa — não desatualiza silenciosamente.
+- **É parte do entregável.** A documentação técnica gerada durante o desenvolvimento
+  vira anexo do relatório final do projeto.
 
-E há uma razão mais importante. **O problema que estamos consertando é que você delegou a
-compreensão para uma ferramenta.** Acrescentar um sistema que lembra por você trabalha
-contra o objetivo. O `DIARIO.md` existe justamente para forçar o inverso: escrever o que
-você não entendeu obriga a admitir o que não entendeu.
-
-> Se em algum momento você sentir falta de memória entre sessões, o sintoma real é que
-> falta algo no `CLAUDE.md`. A correção é escrever lá, não instalar um sistema.
+Se, em algum momento, uma informação de contexto estiver faltando, a correção é
+acrescentá-la ao documento correspondente — não criar um sistema paralelo de memória.
 
 ---
 
-## 2. O ciclo de uma funcionalidade
+## 2. Ciclo de uma funcionalidade
 
-Este é o fluxo que se repete dezenas de vezes ao longo do mês. Cinco passos.
+Fluxo repetido a cada requisito implementado, em cinco etapas.
 
-### Passo 1 — Você formula a hipótese (2 minutos, sem IA)
+### Etapa 1 — Formulação da hipótese
 
-Antes de me pedir qualquer coisa, escreva duas frases:
+Antes de iniciar a implementação, registrar em duas frases o comportamento esperado e a
+camada onde a lógica deve residir, com justificativa.
 
-> *"Vou implementar o RF01. Acho que a regra de unicidade deve ficar numa validation rule
-> customizada, e não no controller, porque preciso reusar no seeder."*
+> *"RF01 exige unicidade de check-in por dia. A validação deve ficar em uma regra
+> customizada, e não no controller, para permitir reuso no seeder."*
 
-Não importa se estiver errado. **Importa que exista um palpite seu para ser corrigido.**
-Quem só recebe resposta não aprende; quem erra um palpite e é corrigido, sim.
+O objetivo não é acertar de primeira — é ter uma posição registrada antes da
+implementação, para que qualquer ajuste seja uma correção rastreável, não uma
+substituição silenciosa.
 
-### Passo 2 — Planejamento antes do código
+### Etapa 2 — Planejamento antes da implementação
 
-No Claude Code, aperte `Shift+Tab` duas vezes para entrar em **plan mode**. Nesse modo eu
-não toco em arquivo nenhum — apresento o plano e espero sua aprovação.
+Para qualquer mudança não trivial, o plano precede o código: arquivos afetados, camada
+envolvida, alternativas razoáveis e o trade-off de cada uma. A implementação só começa
+após esse desenho estar claro.
 
-Peça assim:
+### Etapa 3 — Implementação incremental
 
-> *"Antes de escrever código, me mostre onde isso vai (quais arquivos, qual camada) e
-> quais são as 2 alternativas razoáveis. Eu decido qual seguir."*
+Mudanças pequenas, cada uma cabendo em uma única leitura de revisão. Cada incremento é
+testável isoladamente.
 
-**Este passo é o antídoto direto para o seu problema.** Você entende o código porque
-entendeu o plano antes de ele existir.
+### Etapa 4 — Verificação de compreensão
 
-### Passo 3 — Implementação incremental
+Ao final de cada incremento, o comportamento implementado é descrito de memória, sem
+consultar o código. Divergência nessa descrição é sinal de que a implementação precisa
+ser revisada antes de seguir.
 
-Nada de blocos gigantes. Pedaços que cabem em uma leitura. O `CLAUDE.md` já me instrui a
-trabalhar assim e a fazer uma pergunta de verificação ao final.
+### Etapa 5 — Teste e commit
 
-### Passo 4 — Você reescreve o que o código faz
-
-Feche minha resposta. Sem olhar, escreva de memória o que aquele código faz. Se travar,
-não commite: pergunte de novo.
-
-Esse passo parece perda de tempo e é o mais valioso do fluxo.
-
-### Passo 5 — Teste e commit
-
-Todo requisito entrega com teste. Commit vinculado ao requisito:
+Todo requisito é entregue com teste automatizado. Commit vinculado ao requisito:
 
 ```bash
 git commit -m "RF01: valida unicidade do check-in diário na virada de data"
 ```
 
-No dia 26 você roda `git log --oneline` e tem a evidência do seu Scrum pronta.
+O histórico de commits por requisito serve como evidência do processo iterativo
+adotado.
 
 ---
 
-## 3. O dia
+## 3. Ciclo diário
 
-| Horário | O quê | Duração |
+| Momento | Atividade | Duração aproximada |
 |---|---|---|
-| Início | Abrir o `DIARIO.md`, reler a entrada de ontem, escolher o requisito do dia | 10 min |
-| Manhã | Ciclo do item 2, uma ou duas funcionalidades | 4h |
-| Tarde | Continuação + testes | 3h |
-| Fim | Rodar `php artisan test`, commitar, escrever a entrada do diário | 30 min |
+| Início | Revisar a entrada anterior do diário técnico, definir o requisito do dia | 10 min |
+| Período principal | Ciclo da seção 2, um ou dois requisitos | 7h |
+| Fechamento | Rodar a suíte de testes, commitar, registrar entrada no diário | 30 min |
 
-**A entrada do diário não é opcional.** Três campos: o que entreguei, onde travei, o que
-ainda não entendo. O terceiro em branco por dois dias seguidos significa que você voltou a
-aceitar código sem ler.
+A entrada diária no `DIARIO.md` não é opcional. Três campos mínimos: o que foi
+entregue, onde houve impedimento, o que permanece como questão em aberto. O terceiro
+campo vazio por dois dias seguidos indica que uma decisão foi aplicada sem compreensão
+suficiente — sinal para retomar o item antes de avançar.
 
 ---
 
-## 4. A sprint
+## 4. Ciclo de sprint
 
-**Abertura (segunda-feira, 20 min).** Reler o objetivo da sprint no `PLANO-MESTRE`, listar
-os requisitos, definir o critério de pronto.
+**Abertura (20 min):** revisar o objetivo da sprint no plano mestre, listar os
+requisitos, definir critério de pronto.
 
-**Fechamento (última noite, 40 min):**
+**Fechamento (40 min):**
 
 1. Rodar toda a suíte de testes.
-2. Preencher a retrospectiva no `DIARIO.md` — inclusive o campo *"Para o artigo (Seção 5)"*.
-3. **A sabatina.** Peça:
-
-> *"Você é a banca do meu TCC. Leia o código desta sprint e me faça 8 perguntas técnicas
-> difíceis sobre as decisões de arquitetura. Não me dê as respostas."*
-
-Responda por escrito. As que errar viram estudo do fim de semana. Isso vale mais que
-qualquer revisão de slides — é literalmente o ensaio da defesa, cinco vezes.
-
-4. Se algum item não coube, ele **desce para "evolução futura" no artigo**. Não sobe para
-   a sprint seguinte. Empurrar item é o que destrói cronogramas.
+2. Preencher a retrospectiva no `DIARIO.md`, incluindo o registro para a documentação
+   final.
+3. **Revisão técnica de encerramento.** Simular perguntas de avaliação sobre as
+   decisões de arquitetura da sprint, respondê-las por escrito. Itens não respondidos
+   corretamente viram estudo dirigido.
+4. Item que não coube desce para "trabalho futuro" na documentação — não é empurrado
+   para a sprint seguinte. Empurrar item é a causa mais comum de estouro de cronograma
+   em projetos de escopo fixo.
 
 ---
 
-## 5. Divisão de ferramentas
+## 5. Ambiente de trabalho
 
-| Frente | Onde | Por quê |
+| Frente | Ambiente | Motivo |
 |---|---|---|
-| Código, migrations, testes, debug | **Claude Code no terminal**, dentro do repo | Roda testes, commita, lê o `CLAUDE.md` sozinho |
-| Artigo, apêndices, análise do SUS, slides | **Cowork** (onde estamos agora) | Melhor para documento e planilha |
-| Acompanhamento de sprint | Quadro (ver item 6) | Visual, e vira evidência de processo |
+| Código, migrations, testes, depuração | Terminal de desenvolvimento, dentro do repositório | Execução de testes e commits no contexto do projeto |
+| Documentação, apêndices, análise de dados, apresentação | Ambiente de redação e planilhas | Mais adequado para documento e análise |
+| Acompanhamento de sprint | Quadro Kanban (seção 6) | Visual, e evidência de processo |
 
 ---
 
 ## 6. Quadro de sprints
 
-Um quadro serve a dois propósitos: sua disciplina, e **evidência do processo de Scrum que a
-seção 4.4 do artigo afirma ter adotado**. O segundo é o que justifica o esforço.
+Um quadro serve a dois propósitos: disciplina de acompanhamento e evidência do
+processo iterativo declarado na metodologia do projeto.
 
-**A regra de ouro: um só quadro, e ele não substitui o `git log`.** Duas fontes de verdade
-para a mesma informação é como se perde controle.
+**Regra:** um único quadro, que não substitui o histórico do Git. Duas fontes de
+verdade para a mesma informação é como se perde controle sobre o estado real do
+projeto.
 
-### Estrutura sugerida
+### Estrutura
 
 Listas: `Backlog` → `Sprint atual` → `Fazendo` → `Em teste` → `Pronto`
 
-Um cartão por requisito, com o código no título (`RF01 — Check-in diário de humor`) e no
-verso: critério de pronto, testes exigidos, seção do artigo afetada.
+Um cartão por requisito, com o código no título (`RF01 — Check-in diário de humor`) e,
+na descrição: critério de pronto, testes exigidos, seção da documentação afetada.
 
-Cartões fixos de contexto, que não se movem: **os 7 cenários de teste obrigatórios**, os
-**bloqueadores do artigo (B1–B5)**, e o **code freeze de 21/08**.
+Cartões fixos, que não se movem: os cenários de teste obrigatórios, os bloqueadores de
+redação, o marco de code freeze.
 
-### O risco, e como matá-lo
+### Manutenção
 
-Quadro de projeto solo morre por volta do dia 10 — você para de mover cartão e ele passa a
-mentir sobre o estado real. **A mitigação é eu manter o quadro atualizado**, no fechamento
-de cada sprint, a partir do que realmente foi commitado. Aí ele nunca mente.
+O quadro é atualizado ao final de cada sprint, a partir do que foi efetivamente
+commitado — nunca antecipado. Um quadro atualizado por expectativa, e não por entrega
+real, deixa de ser confiável.
 
 ---
 
-## 7. As regras que não mudam
+## 7. Regras que não mudam
 
-1. **Nenhuma linha entra no repositório sem que você consiga explicá-la em voz alta.**
-2. Toda tabela de negócio nasce com `organization_id`. Na primeira migration.
+1. Nenhuma linha entra no repositório sem que quem a propôs consiga explicá-la em voz
+   alta.
+2. Toda tabela de negócio nasce com `organization_id`, na primeira migration.
 3. Feedback anônimo não grava o remetente. Nunca.
 4. Ranking ordena por XP. Nunca por humor. Visível só ao Administrador.
 5. Nada de recompensas ou resgates — fora de escopo.
 6. RF03, RF09, RF10 e RF12 são complementares. Só depois dos essenciais.
-7. Code freeze em 21/08 às 23h. Depois disso, só bug crítico.
-8. Item que não coube na sprint vira "trabalho futuro", não dívida.
+7. Code freeze em 22/08 às 23h. Depois disso, só correção de bug crítico.
+8. Item que não coube na sprint vira "trabalho futuro", não dívida técnica silenciosa.
 
-Todas estão no `CLAUDE.md`, então eu as aplico sozinho. Se eu escorregar, me cobre.
+Todas estão detalhadas em `CLAUDE.md`.
 
 ---
 
-## 8. Quando as coisas derem errado
+## 8. Tratamento de bloqueios
 
-**Travou mais de 1 hora no mesmo erro.** Pare de tentar variações. Descreva o problema do
-zero, com a mensagem de erro completa e o que você já tentou. Vinte minutos de contexto bem
-escrito valem mais que três horas de tentativa.
+**Impasse com mais de uma hora no mesmo problema.** Interromper tentativas de variação
+pontual. Descrever o problema do zero, com a mensagem de erro completa e o que já foi
+tentado. Contexto bem registrado reduz o tempo de diagnóstico mais do que tentativa e
+erro.
 
-**A RLS não coopera.** É a parte mais técnica do projeto. Se passar de um dia e meio,
-entregue com Global Scope + testes provando isolamento e reposicione a RLS como camada
-parcial. Mas tente de verdade primeiro — é seu diferencial.
+**Row Level Security não coopera.** É a parte mais técnica do projeto. Se ultrapassar
+um dia e meio, entregar com Global Scope e testes provando isolamento, e reposicionar a
+RLS como camada parcialmente implementada. Tentar a implementação completa primeiro,
+porque é o diferencial técnico do trabalho.
 
-**Você não entende um código que já commitou.** Volte nele. Peça explicação linha a linha e
-reescreva o comentário do topo com suas palavras. Código não compreendido é dívida que
-vence no dia da banca.
+**Trecho de código já commitado não está claro.** Revisitar, reescrever o comentário de
+cabeçalho com as próprias palavras. Código não compreendido é dívida técnica que se
+manifesta no momento da avaliação final.
 
-**A sprint estourou.** Corte escopo, não qualidade. Um requisito a menos, bem feito e
-testado, é melhor que dois pela metade — e é defensável na banca. O contrário, não.
+**Sprint estourou.** Cortar escopo, não qualidade. Um requisito a menos, bem feito e
+testado, é preferível a dois pela metade — e é o único dos dois que é defensável.

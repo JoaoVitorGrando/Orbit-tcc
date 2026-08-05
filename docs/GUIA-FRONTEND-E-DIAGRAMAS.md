@@ -1,149 +1,86 @@
-# Orbit RH — Portar o Front-end + Plano de Diagramas
+# Orbit RH — Auditoria Técnica do Protótipo e Plano de Diagramas
 
-Análise do protótipo em `Orbit-test/` · 28/07/2026
+Auditoria do código legado, conduzida antes do início da reconstrução. Registra as
+divergências entre a especificação do produto e a implementação anterior, e a decisão
+tomada para cada uma.
 
 ---
 
-## Parte 1 — Sim, dá para sair idêntico. E é fácil.
+## Parte 1 — Migração do design system
 
-Boa notícia: **sua identidade visual não depende do back-end.** Ela vive em três
-arquivos com acoplamento zero. Você copia, cola, e está pronto.
+O sistema visual não depende do back-end: vive em arquivos com acoplamento zero ao
+restante da aplicação, o que permitiu reaproveitá-lo sem risco.
 
-### Os 3 arquivos que carregam 100% do visual
+### Arquivos que compõem o sistema visual
 
-| Arquivo | Linhas | O que contém |
+| Arquivo | Linhas | Conteúdo |
 |---|---|---|
-| `src/index.css` | 1.156 | Todo o design system: tokens (`@theme`), gradientes, e ~60 classes de componente (`.panel-card`, `.data-table`, `.modal-panel`, `.profile-*`, `.btn-*`) **+ toda a CSS do fundo cósmico** (estrelas, órbita, planeta `#earth`, estrelas cadentes) |
-| `src/components/ui/parallax-cosmic-background.jsx` | 234 | O componente `<CosmicParallaxBg>` — gera as estrelas via `box-shadow`, os detritos em órbita e o texto animado |
-| `src/theme/orbitPalette.js` | 29 | Paleta em JS para os gráficos Recharts (eixos, grid, tooltip) |
+| `src/index.css` | 1.156 | Tokens de design (`@theme`), gradientes, ~60 classes de componente (`.panel-card`, `.data-table`, `.modal-panel`, `.profile-*`, `.btn-*`) e a CSS do fundo animado (estrelas, órbita, planeta `#earth`) |
+| `src/components/ui/parallax-cosmic-background.jsx` | 234 | Componente `<CosmicParallaxBg>` — estrelas via `box-shadow`, detritos em órbita, texto animado |
+| `src/theme/orbitPalette.js` | 29 | Paleta em JS para os gráficos Recharts |
 
-O planeta que você quer na tela de login é o `#earth` no `index.css` (linha ~700):
-um `<div>` de 580px com `radial-gradient` e `box-shadow` interno. Não é imagem, não é
-biblioteca 3D. É CSS puro. Portável sem risco.
+O planeta da tela de login é o `#earth` em `index.css`: um elemento de 580px com
+`radial-gradient` e `box-shadow` interno. CSS puro, sem imagem nem biblioteca 3D.
 
-### Procedimento — Dia 1 da Sprint 0 (30 minutos)
-
-```bash
-# 1. Crie o projeto novo
-npm create vite@latest frontend -- --template react
-cd frontend
-
-# 2. Instale exatamente as mesmas dependências do protótipo
-npm i @headlessui/react @heroicons/react @tailwindcss/postcss axios \
-      date-fns lucide-react postcss react-hot-toast react-router-dom \
-      recharts tailwindcss
-
-# 3. Copie os 3 arquivos do protótipo, sem alterar nada
-#    (ajuste o caminho de origem conforme onde você arquivou o legado)
-cp ../orbit-rh-legacy/frontend/src/index.css                              src/
-cp ../orbit-rh-legacy/frontend/postcss.config.js                          .
-mkdir -p src/theme src/components/ui
-cp ../orbit-rh-legacy/frontend/src/theme/orbitPalette.js                  src/theme/
-cp ../orbit-rh-legacy/frontend/src/components/ui/parallax-cosmic-background.jsx  src/components/ui/
-
-# 4. Fonte Poppins no index.html (o design system depende dela)
-#    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-```
-
-Pronto. A partir daqui, qualquer tela nova que você escrever usando as classes
-`.panel-card`, `.data-table`, `.section-card`, `.btn-primary` sai **automaticamente**
-no mesmo estilo. É esse o ponto de ter um design system: a consistência não depende
-da sua disciplina, depende do CSS.
-
-### Componentes de apoio — copie também (são casca, sem regra de negócio)
-
-`components/ui/`: `button.jsx`, `card.jsx`, `badge.jsx`, `ModalBase.jsx`,
+**Status: concluído.** Os três arquivos, mais a fonte Poppins e os componentes de apoio
+sem lógica de domínio (`button.jsx`, `card.jsx`, `badge.jsx`, `ModalBase.jsx`,
 `PageContainer.jsx`, `EmptyState.jsx`, `ErrorBanner.jsx`, `LoadingScreen.jsx`,
-`Skeleton.jsx` · e `components/layout/AppLayout.jsx` (sidebar + topbar).
+`Skeleton.jsx`, `AppLayout.jsx`), foram portados para o projeto novo e validados por
+teste de fumaça.
 
-Esses são seguros porque não têm lógica de domínio. **Mas leia cada um antes de
-commitar** — vale a regra do plano: você precisa saber explicar.
-
-### O que **não** copiar
-
-As páginas (`pages/**`). Elas misturam layout com chamadas de API e regra de negócio,
-e é exatamente onde mora o código que você não entende. Você vai reescrevê-las sprint
-a sprint. Só que agora, com o design system já no lugar, cada tela nova sai pronta
-visualmente — você foca na lógica, que é o que precisa dominar.
-
-**Use as páginas antigas como referência visual**, não como fonte. Abra lado a lado,
-veja como a tela era, reescreva o JSX aplicando as classes. Leva 30–40 min por tela e
-você termina sabendo o que cada linha faz.
-
-### Uma sugestão sobre o login
-
-Os campos de login vêm pré-preenchidos com `admin@araufer.local` / `12345678`, e há um
-bloco "Ver credenciais de demonstração". Isso é ótimo para o teste de usabilidade
-(os 8 voluntários não vão querer digitar credenciais) — **mantenha**. Só registre no
-Apêndice B que as credenciais foram fornecidas na tela, porque isso afeta a primeira
-tarefa do roteiro.
+**O que não foi portado:** as páginas (`pages/**`) do protótipo. Misturam layout com
+chamadas de API e regra de negócio — são reescritas requisito a requisito, usando as
+telas antigas como referência visual, não como fonte.
 
 ---
 
-## Parte 2 — Divergências entre o artigo e o protótipo
+## Parte 2 — Divergências identificadas entre a especificação e o protótipo
 
-Aqui está o que mais importa nesta análise. Encontrei cinco pontos onde o **artefato
-contradiz o que o artigo afirma**. Duas são graves.
+Cinco pontos em que o código legado contradizia os requisitos declarados. Duas eram
+graves o suficiente para comprometer a arquitetura central do projeto.
 
-### 🔴 D1 — O banco é SQLite, não PostgreSQL
+### D1 — Banco de dados SQLite, sem suporte a Row Level Security
 
 ```
 backend/.env → DB_CONNECTION=sqlite
 backend/database/database.sqlite
 ```
 
-Seu artigo, seção 2.7, diz textualmente:
+A especificação do produto determina PostgreSQL como banco de dados, escolha
+justificada pelo suporte nativo a Row Level Security — mecanismo que compõe a segunda
+camada da defesa em profundidade exigida pelos requisitos não funcionais de isolamento.
 
-> "A persistência será realizada em PostgreSQL, **escolha determinada pelo mecanismo
-> nativo de Row Level Security** descrito em 2.5."
+**SQLite não implementa Row Level Security.** Sem PostgreSQL, essa camada de isolamento
+simplesmente não existe no artefato, independentemente do que a documentação declare.
 
-E o RNF03 exige "defesa em profundidade: filtro automático na aplicação e Row Level
-Security no banco de dados".
+**Status: resolvido.** A Sprint 0 estabeleceu PostgreSQL com RLS desde a fundação do
+projeto novo.
 
-**SQLite não tem Row Level Security.** Não é uma questão de não ter implementado
-ainda — é impossível de implementar nesse banco. Ou seja: hoje, a contribuição
-técnica central do seu TCC (a defesa em profundidade, seção 2.5, RNF03) **não existe
-no artefato**.
+### D2 — Página de ranking com visibilidade não especificada
 
-Se a banca abrir o `.env`, o trabalho perde credibilidade inteiro. Por isso a Sprint 1
-do plano começa com PostgreSQL e RLS — não é preciosismo, é o que sustenta sua tese.
+`pages/admin/AdminRankingPage.jsx` + rota `/app/admin/ranking` + item de menu.
 
-### 🔴 D2 — Existe uma página de Ranking
+A especificação original previa evitar rankings associados a competição disfuncional
+entre pares, mas o protótipo implementava um ranking sem essa restrição de visibilidade
+documentada.
 
-`pages/admin/AdminRankingPage.jsx` + rota `/app/admin/ranking` + item "Ranking" no menu.
+**Status: resolvido.** Decisão registrada em `docs/REVISOES-ARTIGO-ranking.md`: ranking
+mantido como RF12, ordenado exclusivamente por participação (XP), visível apenas ao
+papel Administrador. Sem visibilidade entre pares, a comparação que caracteriza
+competição disfuncional não ocorre.
 
-Seu artigo, seção 2.3, diz:
+### D3 — Módulo de recompensas fora dos requisitos
 
-> "Evitam-se rankings detalhados que a literatura associa a competição disfuncional."
-
-Você construiu justamente o que se comprometeu a evitar, e a justificativa teórica
-(Hamari, Koivisto e Sarsa, 2014; Tondello et al., 2016) está no texto. Essa é a
-pergunta mais fácil e mais devastadora que a banca pode fazer.
-
-**Duas saídas, escolha uma:**
-
-- **(a) Remover o ranking** e manter apenas o destaque mensal (RF09), que é o que o
-  artigo descreve como "exposição pública restrita ao destaque mensal de maior
-  participação". É coerente e é o caminho que recomendo.
-- **(b) Manter e reescrever a seção 2.3**, assumindo que você adotou ranking visível
-  apenas ao Administrador (não aos colaboradores), o que descaracteriza a competição
-  entre pares. Defensável — mas só se for verdade no código.
-
-Não dá para deixar como está.
-
-### 🟡 D3 — Módulo de Recompensas/Resgates que não existe no artigo
-
-Models `Reward`, `RewardRedemption`, `Recompensa`, `Resgate` · páginas
+Models `Reward`, `RewardRedemption`, `Recompensa`, `Resgate`; páginas
 `AdminRewardsPage.jsx`, `AdminRedemptionsPage.jsx`.
 
-Nenhum dos requisitos RF01–RF11 menciona recompensas ou resgate de pontos. É escopo
-que apareceu do nada — provavelmente porque "gamificação" foi interpretado de forma
-expansiva em algum prompt.
+Nenhum requisito funcional documentado menciona recompensas ou resgate de pontos.
 
-**Decisão:** fora do escopo. Não reimplemente. Se você quiser mantê-lo como diferencial,
-tem que virar RF12 no Quadro 4 e ganhar fundamentação na seção 2.3. Em 30 dias, não vale.
+**Status: resolvido.** Fora de escopo, não reimplementado. Registrado como decisão
+explícita em `CLAUDE.md` e no quadro de sprints, para que a ausência seja reconhecida
+como intencional.
 
-### 🟡 D4 — Vocabulário duplicado em português e inglês
+### D4 — Vocabulário duplicado em português e inglês
 
 | Conceito | Model A | Model B |
 |---|---|---|
@@ -152,17 +89,15 @@ tem que virar RF12 no Quadro 4 e ganhar fundamentação na seção 2.3. Em 30 di
 | Recompensa | `Reward.php` | `Recompensa.php` |
 | Resgate | `RewardRedemption.php` | `Resgate.php` |
 
-Duas entidades para a mesma coisa. Isso é a assinatura clássica de código gerado em
-sessões diferentes sem contexto compartilhado — e é exatamente o problema que o
-`CLAUDE.md` resolve.
+Duas entidades nomeando o mesmo conceito indicam ausência de convenção de nomenclatura
+compartilhada ao longo do desenvolvimento do protótipo.
 
-No projeto novo: **escolha um idioma e registre no `CLAUDE.md`.** Recomendo inglês para
-código (models, tabelas, rotas) e português para a interface. É a convenção mais comum
-em projetos Laravel brasileiros e evita `PpcTarefa` convivendo com `RewardRedemption`.
+**Status: resolvido.** Convenção fixada em `CLAUDE.md`: inglês para código (models,
+tabelas, rotas), português para a interface.
 
-### 🟡 D5 — O multitenant foi parafusado depois, não projetado
+### D5 — Estrutura multitenant adicionada após o schema inicial
 
-Olhe a ordem das migrations:
+Ordem das migrations do protótipo:
 
 ```
 2026_04_17_*  → users, announcements, check_ins, feedback, goals, rewards...
@@ -172,153 +107,109 @@ Olhe a ordem das migrations:
 2026_05_27_100600_extend_feedbacks_for_orbit.php
 ```
 
-Seu artigo (2.4) afirma que a estrutura multitenant está "contemplada no modelo de
-dados e nas políticas de segurança **desde o início**". As migrations contam outra
-história — o tenant foi adicionado a um schema que já existia.
+A especificação afirma que a estrutura multitenant está contemplada no modelo de dados
+desde o início. As migrations do protótipo mostram o contrário: o identificador de
+tenant foi adicionado a um schema que já existia.
 
-No projeto novo isso se resolve sozinho: `organization_id` entra na primeira migration
-de cada tabela. E aí a frase do artigo passa a ser verdadeira.
+**Status: resolvido.** No projeto novo, `organization_id` entra na primeira migration
+de cada tabela de negócio — sem exceção.
 
-### ⚪ D6 — Evidência de processo é fina
+### D6 — Evidência de processo iterativo insuficiente
 
-- **6 commits** no total. O artigo (4.4) fala em "histórico de commits vinculado a
-  funcionalidades".
-- **4 arquivos de teste**, dois deles são os `ExampleTest` que vêm com o Laravel. O
-  artigo fala em "testes automatizados com PHPUnit escritos junto a cada incremento".
+O protótipo registrava 6 commits no total e 4 arquivos de teste, dois deles gerados
+automaticamente pelo framework. A metodologia declarada no projeto prevê histórico de
+commits vinculado a requisitos e testes automatizados escritos junto a cada incremento.
 
-Não é desonestidade — é que o processo descrito não foi o processo executado. Refazer
-com commits por RF e testes por sprint torna a seção 4.4 verdadeira. É mais um motivo
-para o plano de 30 dias.
+**Status: em andamento.** Endereçado pelo processo descrito em
+`FLUXO-DE-TRABALHO.md` — commit por requisito, teste junto ao incremento.
 
 ---
 
-## Parte 3 — Figma: não. E aqui está o porquê.
+## Parte 3 — Diagramas: escopo e ferramenta
 
-**Resposta curta: não use Figma. Seria retrabalho.**
+Cada diagrama deve responder a uma pergunta específica sobre a arquitetura. Diagramas
+sem essa função são descartados.
 
-Figma serve para explorar o visual *antes* de existir código. Você já passou dessa
-fase — seu design system está implementado, tokenizado e funcionando. Um arquivo Figma
-agora seria uma cópia de menor fidelidade do que você já tem, e ficaria desatualizado
-na primeira mudança de CSS.
+### Diagramas produzidos
 
-Duas notas de contexto:
+| # | Diagrama | Pergunta que responde |
+|---|---|---|
+| 1 | Entidade-Relacionamento (DER) | Como o isolamento de dados por organização é modelado? |
+| 2 | Casos de uso | O que cada papel pode fazer? |
+| 3 | Arquitetura em camadas | Como as três camadas do sistema se comunicam? |
+| 4 | Sequência — check-in + XP | Como a unicidade diária e o cálculo de ofensiva são garantidos? |
+| 5 | Sequência — feedback anônimo | Como se prova que o remetente não é persistido? |
+| 6 | Fluxo de seleção do mapeamento sistemático | Como o corpus da revisão de literatura foi filtrado? |
 
-1. Seu `index.css` já credita a origem: *"design tokens extraídos do template Figma
-   'Sales Dashboard', NickelFox"*. Ou seja, o Figma já cumpriu seu papel no projeto.
-   **Verifique a licença desse template** — se for de uso comercial restrito, você
-   precisa mencionar a atribuição na seção de tecnologias. É rápido e evita problema.
-2. Seu artigo (4.4) cita um "protótipo navegável (Apêndice E)". Para o Apêndice E,
-   **capturas de tela do sistema real** valem mais que telas de Figma. Faça os prints
-   depois do code freeze (21/08).
+O diagrama 5 é o de maior valor probatório: torna visível o ponto em que o identificador
+do autor é descartado antes da gravação, ao lado do teste automatizado que confirma o
+comportamento.
 
-**O que você precisa não é Figma. São os artefatos de engenharia que a banca espera —
-e que hoje você não tem.**
+O diagrama 1 é pré-requisito para qualquer discussão sobre a arquitetura multitenant.
 
----
+### Diagramas descartados, e por quê
 
-## Parte 4 — Diagramas: quais fazer, e quais ignorar
-
-Regra: cada diagrama precisa **responder a uma pergunta que a banca vai fazer**. Se
-não responde, é enfeite e consome tempo que você não tem.
-
-### Faça (4 obrigatórios + 2 de alto retorno)
-
-| # | Diagrama | Pergunta que responde | Esforço |
-|---|---|---|---|
-| 1 | **Entidade-Relacionamento (DER)** | "Como você isola os dados de cada organização?" | 2h |
-| 2 | **Casos de uso (UML)** | "O que cada papel pode fazer?" | 1h |
-| 3 | **Arquitetura em camadas** | "Como as três camadas conversam?" (você descreve em 4.4, sem figura) | 1h |
-| 4 | **Sequência — check-in + XP** | "Como você garante um check-in por dia e calcula a ofensiva?" | 1h |
-| 5 | **Sequência — feedback anônimo** ⭐ | "Prove que o remetente não é persistido." | 1h |
-| 6 | **Fluxo de seleção do mapeamento** | "353 registros viraram 5 como?" (protocolo Kitchenham) | 1h |
-
-O **#5 é o mais valioso do conjunto.** Ele torna visual a afirmação mais forte e mais
-atacável do seu trabalho (anonimato técnico irreversível, seção 2.6). Um diagrama de
-sequência que mostra o `user_id` sendo descartado antes do `INSERT`, ao lado do teste
-PHPUnit que prova isso, encerra a discussão.
-
-O **#1 é obrigatório e inegociável.** Você não defende uma arquitetura multitenant sem
-mostrar o modelo de dados.
-
-### Não faça
-
-| Diagrama | Por quê |
+| Diagrama | Motivo |
 |---|---|
-| Diagrama de classes completo | Enorme, desatualiza em uma sprint, ninguém lê. Se quiser um, faça só do módulo de gamificação. |
-| Diagrama de implantação | Só se você realmente publicar em nuvem. Se rodar local na apresentação, seria ficção. |
-| Diagrama de atividades para tudo | Redundante com os de sequência. |
-| Diagrama de estados | Opcional. O único que faria sentido é o do PPC (não iniciado → em andamento → concluído), e ele cabe em uma frase de texto. |
-| Diagrama de rede/infra | Fora do escopo do seu trabalho. |
+| Classes completo | Escopo amplo, desatualiza a cada sprint, baixo valor de leitura |
+| Implantação | Só se aplica com publicação em nuvem real |
+| Atividades | Redundante com os diagramas de sequência |
+| Estados | O único caso relevante (PPC) cabe em uma frase de texto |
+| Rede/infraestrutura | Fora do escopo do projeto |
 
-### Ferramenta: Mermaid, não draw.io nem Figma
+### Ferramenta: Mermaid
 
-Escreva os diagramas em **Mermaid**, em arquivos `.mmd` versionados dentro do
-repositório, em `docs/diagramas/`.
+Diagramas em texto, versionados em `docs/diagramas/*.mmd`:
 
-Três razões, todas defensáveis na banca:
+- Entram no controle de versão; o histórico de mudança é auditável.
+- Renderizam nativamente em GitHub e em editores de código.
+- Evoluem junto com o código, evitando desatualização.
 
-1. **É texto** — entra no Git, aparece no diff, evolui junto com o código. Um `.png`
-   exportado do draw.io não tem histórico.
-2. **Renderiza sozinho** no GitHub e no VS Code. Seu README fica com os diagramas
-   embutidos.
-3. **É "documentação como código"** — uma boa prática de engenharia que você pode
-   citar. Diagrama que mora fora do repositório sempre desatualiza; a literatura de
-   engenharia de software é unânime nisso.
-
-Para o artigo, exporte em PNG/SVG:
+Exportação para a documentação final:
 
 ```bash
 npm i -g @mermaid-js/mermaid-cli
 mmdc -i docs/diagramas/01-der.mmd -o docs/diagramas/png/01-der.png -b transparent -s 3
 ```
 
-Já deixei os 6 diagramas escritos para você em `diagramas-orbit-rh.md` — revise cada
-um contra o que você vai implementar, porque **eles são hipóteses minhas sobre o seu
-modelo**, não verdade. Ajustá-los é parte de dominar o projeto.
+Os diagramas em `docs/diagramas/00-diagramas-comentados.md` são hipóteses de modelagem
+sujeitas a revisão contra a implementação real — não uma especificação fechada.
 
 ---
 
-## Parte 5 — Boas práticas de engenharia, na ordem que importa
+## Parte 4 — Práticas de engenharia adotadas
 
-Só o que rende defesa na banca e cabe em 30 dias.
-
-### Essencial (não negocie)
+### Essenciais
 
 1. **Commits vinculados a requisitos** — `RF01: valida unicidade do check-in diário`.
-   No fim do mês você roda `git log --oneline` e tem a evidência do seu Scrum. Custo
-   marginal zero, altíssimo retorno.
-2. **Testes junto ao incremento**, não no fim. Os 7 cenários listados no `CLAUDE.md`.
-   O teste de defesa em profundidade é a prova executável da sua tese.
-3. **Migrations como fonte da verdade do schema.** Nunca altere o banco pela mão.
-   `php artisan migrate:fresh --seed` tem que reconstruir tudo.
-4. **Seeder determinístico** — mesmo comando, mesmos dados. Você vai rodar antes de
-   cada sessão do teste de usabilidade, e todos os 8 voluntários precisam ver o mesmo
-   estado. Sem isso, seu teste não é comparável.
-5. **`.env.example` versionado, `.env` no `.gitignore`.** Já está certo no protótipo.
+   Evidência direta do processo iterativo, com custo marginal desprezível.
+2. **Testes junto ao incremento**, não ao final. Os cenários obrigatórios listados em
+   `CLAUDE.md`, com prioridade para o teste de defesa em profundidade.
+3. **Migrations como fonte da verdade do schema.** `php artisan migrate:fresh --seed`
+   reconstrói o estado completo do banco.
+4. **Seeder determinístico** — mesmo comando, mesmos dados, requisito do protocolo de
+   avaliação de usabilidade.
+5. **`.env.example` versionado, `.env` no `.gitignore`.**
 
-### Vale muito (baixo custo)
+### Recomendadas
 
-6. **README com passo a passo de instalação.** A banca pode pedir para rodar. Se
-   você levar mais de 5 minutos, é constrangedor.
-7. **Branch por sprint** (`sprint-1-seguranca`), merge na `main` ao fechar. Dá o
-   histórico de incrementos que a DSR pede.
-8. **`DIARIO.md`** — decisões e obstáculos por sprint. Vira a Seção 5 do artigo.
-9. **Um `CHANGELOG.md` por sprint** — três linhas cada. Vira o burndown que você mostra
-   no slide de metodologia.
+6. **README com passo a passo de instalação** verificável em poucos minutos.
+7. **Branch por sprint**, merge na `main` ao fechar.
+8. **Diário técnico** (`DIARIO.md`) — decisões e obstáculos por sprint.
 
-### Ignore neste mês
+### Fora do escopo atual
 
-CI/CD, Docker, cobertura de testes acima de 60%, testes E2E (Cypress/Playwright),
-storybook, monorepo, TypeScript. Tudo isso é boa prática — e tudo isso é tempo que
-você não tem. Cite como "trabalhos futuros" e siga.
+CI/CD, containerização, cobertura de testes acima de 60%, testes end-to-end, sistema de
+design isolado (storybook), monorepo, TypeScript. Registrados como trabalho futuro.
 
 ---
 
-## Resumo executivo
+## Resumo
 
-- **Front-end:** 3 arquivos, 30 minutos, sai idêntico. Risco zero. ✅
-- **Figma:** não. Você já tem coisa melhor implementada.
-- **Diagramas:** 6, em Mermaid, versionados. Prontos no arquivo anexo.
-- **Duas decisões que preciso de você:** o ranking (D2) e o módulo de recompensas (D3).
-- **Um bloqueador técnico:** SQLite → PostgreSQL (D1). É a Sprint 1 inteira e é o que
-  sustenta a contribuição técnica do TCC.
+- **Front-end:** design system migrado integralmente, sem alteração visual.
+- **Diagramas:** seis, em Mermaid, versionados em `docs/diagramas/`.
+- **Divergências D1 a D6:** cinco resolvidas na Sprint 0, uma (D6) endereçada pelo
+  processo corrente.
+- **Bloqueador técnico D1** (SQLite → PostgreSQL) era o de maior impacto: sem ele, a
+  contribuição técnica central do projeto — defesa em profundidade — não existia no
+  artefato.

@@ -1,6 +1,6 @@
 # Revisões no artigo — decisão sobre o ranking
 
-Decisões de 28/07/2026: ranking ordenado por **XP acumulado**, visível **apenas ao
+Decisões de 04/08/2026: ranking ordenado por **XP acumulado**, visível **apenas ao
 Administrador**; módulo de recompensas/resgates **removido do escopo**.
 
 Abaixo, os trechos exatos para substituir. Quatro pontos do artigo.

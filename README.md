@@ -167,9 +167,9 @@ orbit-rh/
 │   ├── REVISOES-ARTIGO-ranking.md
 │   ├── apendices/                Roteiro de tarefas, SUS e TCLE
 │   └── diagramas/                Diagramas em Mermaid
-├── CLAUDE.md                 Regras de trabalho do projeto
-├── DIARIO.md                 Diário de sprint
-└── COMECE-AQUI.md            Passo a passo do dia 1
+├── CLAUDE.md                  Diretrizes de engenharia do projeto
+├── FLUXO-DE-TRABALHO.md       Processo de desenvolvimento
+└── DIARIO.md                  Diário técnico de desenvolvimento
 ```
 
 ---

@@ -1,7 +1,8 @@
-# Orbit RH — Estudo do Produto
+# Orbit RH — Especificação de Produto
 
-Documento de estudo para a banca. Escrito do zero, para quem nunca ouviu falar do sistema.
-Baseado no artigo de qualificação **e** no código do protótipo em `Orbit-test/`.
+Documento de referência do produto, escrito para quem nunca teve contato com o sistema.
+Consolida a fundamentação teórica do projeto de pesquisa e as decisões de arquitetura
+adotadas na implementação.
 
 ---
 
@@ -15,15 +16,14 @@ avança em um plano de carreira por manter esse hábito e por se desenvolver; e 
 enxerga, em um painel, indicadores agregados do clima por unidade — sem nunca ver o humor
 de uma pessoa específica.
 
-Se você tiver que resumir em uma frase na banca, use esta: **escutar continuamente sem
-vigiar individualmente.**
+Princípio de projeto: **escutar continuamente sem vigiar individualmente.**
 
 ---
 
 ## 2. Por que ele existe — a cadeia do problema
 
-O raciocínio do trabalho encadeia cinco fatos. Você precisa saber recitá-los nessa ordem,
-porque é a justificativa inteira do TCC.
+O raciocínio do trabalho encadeia cinco fatos, nesta ordem, e juntos formam a
+justificativa completa do projeto.
 
 **1. O RH virou função estratégica.** Deixou de ser admissão e folha para responder por
 desempenho, retenção e clima (Chiavenato, 2020; Ulrich, 2019).
@@ -100,7 +100,6 @@ promoção interna. E, como efeito colateral, a empresa passa a ter dado diário
 
 Sem a gamificação, o check-in diário morreria em duas semanas — é esse o problema que ela
 resolve. **Gamificação aqui não é enfeite: é o motor de adesão que viabiliza a escuta.**
-Guarde essa frase.
 
 ---
 
@@ -124,10 +123,10 @@ resolvida no fuso da organização, não do servidor — "hoje" é ambíguo e pr
 Cada check-in concede **10 XP**, ou **15 XP se a ofensiva estiver ativa** (dois ou mais
 dias consecutivos).
 
-**Cuidado na defesa.** Humor em três níveis **não é medida psicométrica de engajamento**.
-Não é a UWES de Schaufeli e Bakker. É um indicador comportamental simplificado, e o painel
-deve apresentá-lo como sinal de tendência, nunca como diagnóstico. Diga isso antes que
-perguntem — o artigo já assume essa limitação, e assumi-la é o que te dá credibilidade.
+**Limitação assumida.** Humor em três níveis **não é medida psicométrica de
+engajamento**. Não é a UWES de Schaufeli e Bakker. É um indicador comportamental
+simplificado, e o painel deve apresentá-lo como sinal de tendência, nunca como
+diagnóstico. Essa limitação é declarada explicitamente na fundamentação do projeto.
 
 ### 5.2 Canal de feedback (RF02)
 
@@ -153,9 +152,8 @@ rotear a mensagem à liderança certa.
 
 O feedback marcado como urgente dispara notificação por e-mail ao Administrador (RF03).
 
-**Se a banca pedir uma prova, é esta:** um teste que envia feedback anônimo e verifica
-que nenhum registro anônimo tem autor preenchido. Uma linha de código, argumento
-encerrado.
+**Evidência verificável:** um teste automatizado envia feedback anônimo e confirma que
+nenhum registro anônimo tem autor preenchido.
 
 ### 5.3 Gamificação — XP, níveis e ofensivas (RF04)
 
@@ -215,11 +213,10 @@ que já conhece o negócio abre horizonte de carreira **sem desligamento**.
 ferramenta; o administrador busca pela competência; o sistema encontra alguém **de outra
 filial** que já a declarou.
 
-**Atenção — este é o detalhe sofisticado do sistema.** Essa busca **atravessa a barreira de
-filial de propósito**. Ou seja, é uma exceção deliberada ao isolamento que o resto do
-sistema impõe. Você precisa levantar isso na banca antes que perguntem: não é furo de
-segurança, é requisito de mobilidade interna, restrito a Administrador e Gestor, e nunca
-atravessa organizações.
+**Exceção deliberada ao isolamento.** Essa busca **atravessa a barreira de filial de
+propósito**. É uma exceção documentada ao isolamento que o resto do sistema impõe: não é
+uma falha de segurança, é requisito de mobilidade interna, restrito a Administrador e
+Gestor, e nunca atravessa organizações.
 
 Note também que o portfólio é o **único dado pessoal identificado** exposto à liderança —
 e o artigo justifica isso com finalidade declarada e legítima, na linha do art. 7º da LGPD.
@@ -304,12 +301,13 @@ perguntar "por que não MySQL?", a resposta é essa, e é a única que importa.
 
 ### Como se demonstra
 
-Desabilite o Global Scope, rode a consulta, e veja a RLS barrar mesmo assim. **Esse é o
-melhor momento da sua apresentação.** Vale mais que dez slides.
+Desabilita-se o Global Scope, executa-se a consulta, e observa-se a RLS barrando o
+acesso mesmo assim. É a evidência mais direta da arquitetura de defesa em profundidade
+descrita nesta seção.
 
 ---
 
-## 7. As dez perguntas da banca, e as respostas
+## 7. Perguntas frequentes sobre as decisões de arquitetura
 
 | Pergunta | Resposta curta |
 |---|---|
@@ -390,11 +388,9 @@ comprovante já usam URLs assinadas; e a separação em Services é boa arquitet
 
 ---
 
-## Como estudar este documento
+## Uso deste documento
 
-Leia uma vez inteiro. Depois, cubra a coluna de respostas da Seção 7 e responda em voz
-alta. As que você travar, volte à seção correspondente.
-
-Faça isso três vezes ao longo de agosto — não na véspera. O objetivo não é decorar: é que,
-quando perguntarem algo que não está aqui, você consiga derivar a resposta a partir dos
-princípios. É isso que separa quem construiu de quem encomendou.
+Este documento consolida a fundamentação do produto e as decisões de arquitetura que a
+sustentam. A Seção 7 funciona como referência rápida para perguntas recorrentes sobre
+essas decisões; as demais seções contêm o raciocínio completo por trás de cada resposta,
+permitindo derivar posicionamento sobre questões não cobertas explicitamente aqui.

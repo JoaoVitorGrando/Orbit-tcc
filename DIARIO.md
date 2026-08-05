@@ -1,17 +1,19 @@
-# Diário de Sprint — Orbit RH
+# Diário Técnico — Orbit RH
 
-Registro diário de decisões, obstáculos e aprendizados.
+Registro de desenvolvimento por sprint: entregas, impedimentos, decisões técnicas e
+questões em aberto.
 
-**Este arquivo tem três funções**, e a terceira é a que você vai agradecer no dia 26:
+Este documento cumpre três funções:
 
-1. **Disciplina** — escrever o que não entendeu obriga a admitir o que não entendeu.
-2. **Evidência de processo** — é o registro do seu Scrum, que a seção 4.4 do artigo afirma
-   ter adotado.
-3. **Matéria-prima da Seção 5** — as decisões de projeto que você vai relatar no artigo
-   nascem aqui. Escrevendo três parágrafos por sprint, no dia 26 você estará *editando*,
-   não *escrevendo do zero*.
+1. **Rastreabilidade** — histórico de decisões de projeto e sua justificativa.
+2. **Evidência de processo** — registro do ciclo iterativo adotado, alinhado à
+   metodologia declarada no relatório do projeto.
+3. **Insumo para a documentação final** — as decisões relatadas aqui alimentam
+   diretamente a seção de desenvolvimento do artefato e a de resultados.
 
-**Regra:** uma entrada por dia trabalhado, mesmo curta. A terceira pergunta é obrigatória.
+**Regra:** uma entrada por dia trabalhado, mesmo curta. O campo "Questões em aberto" é
+obrigatório — deixá-lo vazio por dois dias seguidos é sinal de que uma decisão não foi
+suficientemente compreendida antes de ser aplicada.
 
 ---
 
@@ -20,66 +22,53 @@ Registro diário de decisões, obstáculos e aprendizados.
 ```markdown
 ### DD/MM — Sprint N — Dia X
 
-**Entreguei:**
+**Entregas do dia:**
 
-**Travei em:**
+**Impedimentos:**
 
-**Decisão de projeto tomada hoje (e por quê):**
+**Decisão técnica tomada (e justificativa):**
 
-**Ainda não entendo:**
+**Questões em aberto:**
 ```
 
-> A pergunta "ainda não entendo" é a mais importante do documento. Deixá-la em branco por
-> dois dias seguidos é sinal de que você voltou a aceitar código sem ler.
+---
+
+## Sprint 0 — Fundação e domínio (04–05/08)
+
+**Objetivo:** repositório, ambiente e modelo de dados estabelecidos. Nenhuma
+funcionalidade de negócio.
+
+**Definição de pronto:** modelo entidade-relacionamento revisado e compreendido pelo
+autor, sem necessidade de consulta.
+
+### 04/08 — Sprint 0 — Dia 1
+
+**Entregas do dia:**
+
+**Impedimentos:**
+
+**Decisão técnica tomada (e justificativa):**
+
+**Questões em aberto:**
 
 ---
 
-## Sprint 0 — Fundação e domínio (28 a 30/07)
+### 05/08 — Sprint 0 — Dia 2
 
-**Objetivo:** recuperar o controle do projeto. Nenhuma funcionalidade de negócio.
+**Entregas do dia:**
 
-**Definição de pronto:** você consegue desenhar o diagrama ER de memória, em papel.
+**Impedimentos:**
 
-### 28/07 — Sprint 0 — Dia 1
+**Decisão técnica tomada (e justificativa):**
 
-**Entreguei:**
-
-**Travei em:**
-
-**Decisão de projeto tomada hoje (e por quê):**
-
-**Ainda não entendo:**
+**Questões em aberto:**
 
 ---
 
-### 29/07 — Sprint 0 — Dia 2
-
-**Entreguei:**
-
-**Travei em:**
-
-**Decisão de projeto tomada hoje (e por quê):**
-
-**Ainda não entendo:**
-
----
-
-### 30/07 — Sprint 0 — Dia 3
-
-**Entreguei:**
-
-**Travei em:**
-
-**Decisão de projeto tomada hoje (e por quê):**
-
-**Ainda não entendo:**
-
----
-
-## Sprint 1 — Núcleo de segurança (31/07 a 05/08)
+## Sprint 1 — Núcleo de segurança (06–10/08)
 
 **Objetivo:** autenticação, RBAC, Global Scope e Row Level Security.
-**É a sprint mais importante do TCC** — aqui mora a contribuição técnica declarada.
+**Sprint crítica** — concentra a contribuição técnica central do projeto.
 
 **Definição de pronto:** o teste de defesa em profundidade passa — com o Global Scope
 desabilitado, a RLS ainda barra o acesso entre organizações.
@@ -88,32 +77,33 @@ desabilitado, a RLS ainda barra o acesso entre organizações.
 
 **O que funcionou:**
 
-**O que eu faria diferente:**
+**O que seria feito diferente:**
 
-**Para o artigo (Seção 5):**
+**Registro para a documentação final:**
 
 ---
 
-## Sprint 2 — Escuta contínua (06 a 11/08)
+## Sprint 2 — Escuta contínua (11–15/08)
 
 **Objetivo:** check-in diário (RF01), motor de XP (RF04), feedback anônimo (RF02).
 
-**Definição de pronto:** o teste da virada de meia-noite passa e o teste de não persistência
-do remetente passa.
+**Definição de pronto:** o teste da virada de meia-noite passa e o teste de não
+persistência do remetente passa.
 
 ### Retrospectiva da sprint
 
 **O que funcionou:**
 
-**O que eu faria diferente:**
+**O que seria feito diferente:**
 
-**Para o artigo (Seção 5):**
+**Registro para a documentação final:**
 
 ---
 
-## Sprint 3 — Desenvolvimento individual (12 a 17/08)
+## Sprint 3 — Desenvolvimento individual (16–19/08)
 
-**Objetivo:** PPC (RF05), portfólio de competências (RF06), busca por competência (RF07).
+**Objetivo:** PPC (RF05), portfólio de competências (RF06), busca por competência
+(RF07).
 
 **Definição de pronto:** a busca localiza colaborador de outra filial, e a exceção ao
 isolamento está documentada e testada.
@@ -122,33 +112,34 @@ isolamento está documentada e testada.
 
 **O que funcionou:**
 
-**O que eu faria diferente:**
+**O que seria feito diferente:**
 
-**Para o artigo (Seção 5):**
+**Registro para a documentação final:**
 
 ---
 
-## Sprint 4 — Painel e congelamento (18 a 21/08)
+## Sprint 4 — Painel e congelamento (20–22/08)
 
-**Objetivo:** painel agregado (RF08), polimento, seed de demonstração, apêndices prontos.
+**Objetivo:** painel agregado (RF08), polimento, seed de demonstração, documentação de
+apoio à avaliação pronta.
 
 **Definição de pronto:** nenhum indicador expõe humor individual; grupos com menos de 5
 respondentes não são exibidos.
 
-> 🔒 **CODE FREEZE — 21/08 às 23h.** A partir daqui, só correção de bug crítico.
-> Testar um alvo móvel invalida o teste de usabilidade.
+> **Code freeze — 22/08 às 23h.** A partir daqui, somente correção de bug crítico.
+> Alterar o sistema durante a coleta invalida a comparabilidade do teste de usabilidade.
 
 ### Retrospectiva da sprint
 
 **O que funcionou:**
 
-**O que eu faria diferente:**
+**O que seria feito diferente:**
 
-**Para o artigo (Seção 5):**
+**Registro para a documentação final:**
 
 ---
 
-## Sprint 5 — Avaliação (22 a 25/08)
+## Sprint 5 — Avaliação (23–25/08)
 
 **Objetivo:** teste de usabilidade com 8 voluntários, tabulação e análise.
 
@@ -167,7 +158,7 @@ respondentes não são exibidos.
 
 **Média SUS:** ______  **Desvio-padrão:** ______  **Mínimo:** ______  **Máximo:** ______
 
-### Confronto com os critérios de aceitação (Seção 4.5)
+### Confronto com os critérios de aceitação
 
 | Critério | Meta | Resultado | Atendido? |
 |---|---|---|---|
@@ -175,10 +166,10 @@ respondentes não são exibidos.
 | (b) Tarefas essenciais concluídas | 100% por ≥ 70% dos participantes | | |
 | (c) Utilidade percebida | ≥ 70% dos participantes | | |
 
-> Resultado abaixo do critério **não invalida a pesquisa**. É analisado como evidência de
-> revisão de requisitos ou de design, coerente com o caráter iterativo da DSR — como o
-> artigo já estabelece. Um trabalho que reporta 61 e explica honestamente as causas é mais
-> forte que um que reporta 84 sem discussão.
+> Resultado abaixo do critério não invalida a avaliação. É tratado como evidência de
+> revisão de requisitos ou de design, coerente com o caráter iterativo do método adotado.
+> Um resultado de 61 analisado com honestidade sobre as causas é mais forte,
+> metodologicamente, do que um resultado de 84 sem discussão.
 
 ### Padrões observados nas sessões
 
@@ -190,16 +181,16 @@ respondentes não são exibidos.
 
 ---
 
-## Fechamento (26 a 28/08)
+## Fechamento (26–28/08)
 
-- [ ] Seção 5 — Desenvolvimento do artefato
-- [ ] Seção 6 — Resultados e discussão
-- [ ] Seção 7 — Considerações finais reescritas
-- [ ] Artigo inteiro convertido para o pretérito
-- [ ] Bloqueadores B1 a B5 corrigidos (ver `docs/PLANO-MESTRE-30-DIAS.md`)
+- [ ] Seção de desenvolvimento do artefato
+- [ ] Seção de resultados e discussão
+- [ ] Considerações finais reescritas
+- [ ] Texto convertido para o pretérito
+- [ ] Bloqueadores de redação corrigidos (ver `docs/PLANO-MESTRE-30-DIAS.md`)
 - [ ] Revisões do ranking aplicadas (ver `docs/REVISOES-ARTIGO-ranking.md`)
-- [ ] Apêndices A a E montados
+- [ ] Apêndices consolidados
 - [ ] Diagramas exportados em PNG/SVG
-- [ ] Slides da banca
-- [ ] Vídeo da demo gravado (plano B)
-- [ ] Dois ensaios cronometrados, com perguntas hostis
+- [ ] Material de apresentação
+- [ ] Vídeo da demonstração gravado (plano de contingência)
+- [ ] Ensaios cronometrados realizados, com perguntas de sabatina técnica

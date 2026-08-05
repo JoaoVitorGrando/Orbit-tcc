@@ -2,9 +2,8 @@
 
 Salve cada bloco como um arquivo `.mmd` em `docs/diagramas/` do repositório novo.
 
-> ⚠️ **Estes diagramas são hipóteses sobre o seu modelo, não verdade.** Revise cada um
-> contra o que você vai implementar e ajuste. Revisar é parte de dominar o projeto —
-> se você aceitar sem ler, repetimos o erro que estamos consertando.
+> ⚠️ **Estes diagramas são hipóteses de modelagem, não especificação fechada.** Cada um
+> deve ser revisado contra a implementação real e ajustado conforme necessário.
 
 ---
 
@@ -129,7 +128,7 @@ erDiagram
     }
 ```
 
-**Pontos para você defender:**
+**Pontos de sustentação técnica:**
 
 - `organization_id` em toda tabela de negócio → é o que o Global Scope e as políticas de
   RLS usam como filtro (RNF02, RNF03).
@@ -209,7 +208,7 @@ flowchart LR
 
 **Note o que este diagrama torna visível:** o Gestor vê o painel da sua unidade; o
 Administrador vê todas. Essa distinção precisa aparecer também no código (RBAC + escopo
-por filial). Se você desenhar assim e implementar diferente, criou uma contradição nova.
+por filial). Divergência entre este diagrama e a implementação constitui inconsistência a ser evitada.
 
 **O UC15 está destacado de propósito.** Ele é o único caso de uso ligado a um único
 ator, e é o que carrega a decisão de privacidade mais delicada do sistema: o ranking
@@ -257,9 +256,9 @@ flowchart TB
     class SCOPE,RLS defesa
 ```
 
-**Os dois blocos destacados são a sua contribuição técnica.** Este diagrama é o slide
-central da sua apresentação: mostre que, se a Camada 1 falhar, a Camada 2 ainda barra.
-Depois rode o teste ao vivo.
+**Os dois blocos destacados representam a contribuição técnica central do projeto.**
+A demonstração recomendada: mostrar que, se a Camada 1 falhar, a Camada 2 ainda barra
+o acesso — seguida da execução do teste automatizado correspondente.
 
 ---
 
@@ -364,7 +363,7 @@ sequenceDiagram
     end
 ```
 
-**O argumento que você faz na banca:** o anonimato não é uma decisão de apresentação
+**O argumento sustentado por este diagrama:** o anonimato não é uma decisão de apresentação
 (esconder o nome na tela), é uma decisão de persistência (o nome nunca foi gravado).
 Reversibilidade é impossível porque não há o que reverter. Isso é o que a seção 2.6
 chama de "anonimato técnico irreversível por construção", e atende ao princípio da
