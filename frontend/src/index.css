@@ -1,0 +1,1206 @@
+@import "tailwindcss";
+
+/* ============================================================
+   ORBIT RH — DESIGN SYSTEM
+   ------------------------------------------------------------
+   Fonte única de verdade da identidade visual da aplicação.
+   Qualquer tela que use as classes definidas aqui sai
+   automaticamente no estilo do produto.
+
+   Estrutura do arquivo:
+     1. @theme          tokens (cores, fontes, sombras)
+     2. :root           gradientes reutilizáveis
+     3. @layer base     reset, tipografia, foco visível
+     4. @layer components  ~68 classes de componente
+                        (.panel-card, .data-table, .modal-panel,
+                         .profile-*, .btn-*, .dashboard-*)
+     5. Fundo cósmico   estrelas, órbita, planeta (#earth), texto
+     6. Acessibilidade  prefers-reduced-motion
+
+   Dependência: fonte Poppins, carregada no index.html.
+
+   Origem dos tokens: template Figma "Sales Dashboard" (NickelFox).
+   ⚠️ Verificar os termos de licença do template antes de qualquer
+   uso comercial, e manter a atribuição na seção de tecnologias
+   do trabalho.
+   ============================================================ */
+@theme {
+  --font-sans: "Poppins", "Segoe UI", sans-serif;
+
+  /* Cores principais */
+  --color-primary: #008080;
+  --color-primary-dark: #006666;
+  --color-primary-deeper: #002222;
+  --color-secondary: #07a30d;
+  --color-secondary-light: #88ff8d;
+  --color-navicon: #80d4d4;
+  --color-page: #efefef;
+
+  /* Sombras do template */
+  --shadow-ds: 0px 4px 11px 0px rgba(0, 0, 0, 0.21);
+  --shadow-ds2: 8px 24px 31px 0px rgba(30, 15, 62, 0.39);
+  --shadow-sidebar: 0px 21px 21px 1px rgba(0, 64, 64, 0.53);
+}
+
+:root {
+  /* Gradientes reutilizáveis (uso inline via var()) */
+  --sidebar-gradient: linear-gradient(180deg, #008080 0%, #004d4d 100%);
+  --brand-gradient: linear-gradient(135deg, #008080 0%, #006666 100%);
+  --accent-gradient: linear-gradient(90deg, #008080 0%, #80d4d4 100%);
+  /* Canvas escuro do "container" do dashboard (template) */
+  --canvas-gradient: radial-gradient(ellipse 90% 80% at 25% 0%, #001a1a 0%, #000d0d 45%, #000808 100%);
+}
+
+@layer base {
+  html {
+    @apply antialiased;
+    font-size: 16px;
+  }
+
+  @media (min-width: 1280px) {
+    html {
+      font-size: 17px;
+    }
+  }
+
+  body {
+    color: #e0f5f5;
+    background: var(--canvas-gradient) fixed;
+    background-color: #000808;
+    font-family: var(--font-sans);
+    min-height: 100vh;
+  }
+
+  button,
+  [role='button'],
+  a,
+  input,
+  select,
+  textarea {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#008080]/40 focus-visible:ring-offset-1 focus-visible:ring-offset-transparent;
+  }
+}
+
+@layer components {
+  /* Cards brancos — forçam texto escuro para os filhos por herança */
+  .card {
+    @apply rounded-3xl border border-black/5 bg-white;
+    box-shadow: var(--shadow-ds);
+    color: #1f2937;
+  }
+
+  .btn-primary {
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-2xl bg-[#008080] px-5 text-base font-medium text-white transition hover:bg-[#006666] disabled:cursor-not-allowed disabled:opacity-60 lg:h-12 lg:px-6;
+  }
+
+  .btn-secondary {
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-2xl border border-[#008080]/45 bg-[#008080]/15 px-5 text-base font-medium text-white transition hover:border-[#008080]/65 hover:bg-[#008080]/28 disabled:cursor-not-allowed disabled:opacity-60 lg:h-12 lg:px-6;
+  }
+
+  .btn-ghost {
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-2xl px-4 text-base font-medium text-slate-600 transition hover:bg-[#008080]/10 hover:text-[#002222] disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .input-base {
+    @apply w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 transition placeholder:text-slate-400 focus:border-[#008080] focus:ring-2 focus:ring-[#008080]/15;
+  }
+
+  /* Inputs/selects no slot de acoes do cabecalho (sobre canvas escuro) */
+  .page-actions .input-base,
+  .page-actions select,
+  .page-actions textarea {
+    @apply border-[#008080]/35 bg-[#000d0d] text-white placeholder:text-white/40 focus:border-[#008080] focus:ring-[#008080]/25;
+  }
+
+  .page-actions label,
+  .page-actions span {
+    @apply text-white/70;
+  }
+
+  .page-actions option {
+    color: #ffffff;
+    background: #001a1a;
+  }
+
+  .page-actions .btn-secondary {
+    @apply border-[#008080]/45 bg-[#008080]/15 text-white hover:border-[#008080]/65 hover:bg-[#008080]/28;
+  }
+
+  .file-input {
+    @apply w-full rounded-2xl border border-[#008080]/35 bg-[#000d0d] px-4 py-2.5 text-sm text-white/80 transition focus:border-[#008080] focus:outline-none focus:ring-2 focus:ring-[#008080]/25;
+  }
+
+  .file-input::file-selector-button {
+    @apply mr-3 cursor-pointer rounded-lg border border-[#008080]/45 bg-[#008080]/15 px-3 py-1.5 text-xs font-semibold text-[#80d4d4] transition hover:bg-[#008080]/28;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-[#80d4d4] lg:text-sm;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-[#008080]/35 bg-[#008080]/15 px-3 py-1 text-xs font-medium text-[#80d4d4] lg:text-sm;
+  }
+
+  .badge-dark {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium text-white lg:text-sm;
+    background: var(--brand-gradient);
+  }
+
+  .section-card {
+    @apply rounded-3xl border border-[#008080]/30 p-6 lg:p-8;
+    background: linear-gradient(165deg, #001a1a 0%, #000d0d 55%, #000808 100%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    color: #ffffff;
+  }
+
+  /* Conteúdo herdado: converte utilitários claros para o tema escuro */
+  .section-card :is(.text-slate-900, .text-slate-800) {
+    @apply text-white;
+  }
+
+  .section-card :is(.text-slate-700, .text-slate-600, .text-slate-500) {
+    @apply text-white/60;
+  }
+
+  .section-card .text-slate-400 {
+    @apply text-white/40;
+  }
+
+  .section-card :is(.bg-slate-50, .bg-slate-100),
+  .section-card .bg-slate-50\/60,
+  .section-card .bg-slate-50\/70 {
+    background: rgba(0, 128, 128, 0.1);
+  }
+
+  .section-card .bg-white {
+    background: rgba(0, 13, 13, 0.6);
+  }
+
+  .section-card .bg-slate-200 {
+    background: rgba(0, 128, 128, 0.2);
+  }
+
+  .section-card .bg-slate-300 {
+    background: rgba(0, 128, 128, 0.35);
+  }
+
+  .section-card :is(.border-slate-100, .border-slate-200, .border-slate-300) {
+    border-color: rgba(0, 128, 128, 0.22);
+  }
+
+  .section-card .input-base,
+  .section-card textarea.input-base {
+    @apply border-[#008080]/35 bg-[#000d0d] text-white placeholder:text-white/40 focus:border-[#008080] focus:ring-[#008080]/25;
+  }
+
+  /* hover de text claros dentro de section-card */
+  .section-card .hover\:text-slate-900:hover { color: #fff; }
+  .section-card .hover\:border-slate-200:hover,
+  .section-card .hover\:border-slate-300:hover { border-color: rgba(0,128,128,0.4); }
+
+  /* divide dentro de section-card */
+  .section-card :is(.divide-slate-100, .divide-slate-200) > :not([hidden]) ~ :not([hidden]) {
+    border-color: rgba(0, 128, 128, 0.2);
+  }
+
+  /* Painel de vidro (topbar, busca) sobre o canvas escuro */
+  .glass {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(10px);
+  }
+
+  .glass-input {
+    @apply w-full bg-transparent text-sm text-white outline-none placeholder:text-white/50;
+  }
+
+  .data-table {
+    @apply min-w-full text-left text-sm;
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .table-card {
+    @apply overflow-hidden rounded-3xl border border-[#008080]/30;
+    background: linear-gradient(165deg, #001a1a 0%, #000d0d 55%, #000808 100%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    color: #ffffff;
+  }
+
+  /* Painéis escuros (dashboard, filiais, comunicados) */
+  .panel-card {
+    @apply rounded-3xl border border-[#008080]/30 p-5 lg:p-6;
+    background: linear-gradient(165deg, #001a1a 0%, #000d0d 55%, #000808 100%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    color: #ffffff;
+  }
+
+  .panel-card h2,
+  .panel-card h3,
+  .panel-card .panel-title {
+    @apply font-semibold text-white;
+  }
+
+  .panel-card .panel-muted {
+    @apply text-white/55;
+  }
+
+  .panel-card .panel-accent {
+    @apply text-[#80d4d4];
+  }
+
+  .panel-card .input-base {
+    @apply border-[#008080]/35 bg-[#000d0d] text-white placeholder:text-white/40 focus:border-[#008080] focus:ring-[#008080]/25;
+  }
+
+  .panel-card .btn-secondary {
+    @apply border-[#008080]/45 bg-[#008080]/15 text-white hover:border-[#008080]/65 hover:bg-[#008080]/28;
+  }
+
+  .panel-card .btn-secondary.btn-danger {
+    @apply border-red-500/45 bg-red-950/40 text-red-200 hover:border-red-400/55 hover:bg-red-900/50;
+  }
+
+  .panel-kpi {
+    @apply flex items-center gap-4 rounded-3xl border border-[#008080]/30 p-5 lg:p-6;
+    background: linear-gradient(165deg, #001a1a 0%, #000d0d 55%, #000808 100%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    color: #ffffff;
+  }
+
+  .panel-kpi-value {
+    @apply text-3xl font-semibold leading-tight tracking-tight text-white lg:text-4xl;
+  }
+
+  .panel-kpi-label {
+    @apply mt-0.5 text-sm font-medium text-[#80d4d4];
+  }
+
+  .panel-kpi-hint {
+    @apply mt-0.5 text-xs text-white/45;
+  }
+
+  .panel-chart {
+    @apply rounded-3xl border border-[#008080]/30 p-6 lg:p-7;
+    background: linear-gradient(165deg, #001a1a 0%, #000d0d 55%, #000808 100%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    color: #ffffff;
+  }
+
+  .panel-chart-title {
+    @apply text-lg font-medium text-white;
+  }
+
+  .panel-chart-value {
+    @apply text-2xl font-semibold tracking-tight text-white lg:text-3xl;
+  }
+
+  .panel-chart-sublabel {
+    @apply mt-0.5 text-sm text-[#80d4d4];
+  }
+
+  .panel-announcement {
+    @apply flex flex-col gap-3 rounded-3xl border border-[#008080]/30 p-4;
+    background: linear-gradient(165deg, #001a1a 0%, #000d0d 70%, #000808 100%);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+  }
+
+  .panel-announcement .media-placeholder {
+    @apply grid h-36 place-items-center rounded-xl border border-[#008080]/20 text-[#80d4d4]/50;
+    background: rgba(0, 128, 128, 0.08);
+  }
+
+  .panel-comunicado-spotlight {
+    @apply relative mx-auto w-full max-w-[300px] rounded-3xl border border-[#008080]/35 p-6 text-center;
+    background: linear-gradient(165deg, #001a1a 0%, #003333 100%);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
+    color: #ffffff;
+    transform: rotate(-6deg);
+  }
+
+  /* Perfil — layout escuro em tela cheia */
+  .profile-participacao {
+    @apply rounded-3xl border border-[#008080]/35 p-5 lg:p-6;
+    background: linear-gradient(135deg, rgba(0, 40, 40, 0.95) 0%, rgba(0, 20, 20, 0.98) 100%);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  }
+
+  .profile-hero {
+    @apply flex flex-col gap-6 rounded-3xl border border-[#008080]/30 p-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:p-8 xl:p-10;
+    background: linear-gradient(135deg, #001a1a 0%, #002828 45%, #000d0d 100%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    color: #ffffff;
+  }
+
+  .profile-hero-avatar {
+    @apply relative shrink-0;
+  }
+
+  .profile-hero-avatar-ring {
+    @apply flex size-24 items-center justify-center overflow-hidden rounded-full text-3xl font-bold text-white ring-4 ring-[#008080]/35 lg:size-28 lg:text-4xl;
+    background: var(--brand-gradient);
+    box-shadow: 0 0 40px rgba(0, 128, 128, 0.35);
+  }
+
+  .profile-hero-avatar-ring img {
+    @apply size-full object-cover;
+  }
+
+  .profile-hero-edit {
+    @apply absolute -bottom-1 -right-1 grid size-9 place-items-center rounded-full border-2 border-[#000d0d] bg-[#008080] text-white shadow-lg transition hover:bg-[#006666];
+  }
+
+  .profile-hero-name {
+    @apply text-2xl font-semibold tracking-tight text-white lg:text-3xl;
+  }
+
+  .profile-hero-meta {
+    @apply mt-2 flex flex-wrap items-center gap-2;
+  }
+
+  .profile-role-badge {
+    @apply inline-flex rounded-full border border-[#008080]/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em];
+    background: rgba(0, 128, 128, 0.22);
+    color: #80d4d4;
+  }
+
+  .profile-email-chip {
+    @apply mt-3 inline-flex max-w-full items-center gap-2 truncate rounded-xl border border-[#008080]/25 px-4 py-2 text-sm text-white/70;
+    background: rgba(0, 128, 128, 0.1);
+  }
+
+  .profile-section {
+    @apply overflow-hidden rounded-3xl border border-[#008080]/30;
+    background: linear-gradient(165deg, #001a1a 0%, #000d0d 55%, #000808 100%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    color: #ffffff;
+  }
+
+  .profile-section-header {
+    @apply flex items-center gap-3 border-b border-[#008080]/25 px-6 py-4 lg:px-8 lg:py-5;
+  }
+
+  .profile-section-title {
+    @apply text-base font-semibold text-white lg:text-lg;
+  }
+
+  .profile-section-body {
+    @apply space-y-5 p-6 lg:space-y-6 lg:p-8;
+  }
+
+  .profile-field label {
+    @apply block text-xs font-semibold uppercase tracking-[0.16em] text-[#80d4d4];
+  }
+
+  .profile-tag-input {
+    @apply min-h-[44px] w-full cursor-text rounded-2xl border border-[#008080]/35 bg-[#000d0d] px-3 py-2 transition focus-within:border-[#008080] focus-within:ring-2 focus-within:ring-[#008080]/25;
+  }
+
+  .profile-tag {
+    @apply flex items-center gap-1 rounded-full border border-[#008080]/30 px-2.5 py-0.5 text-xs font-medium text-[#80d4d4];
+    background: rgba(0, 128, 128, 0.2);
+  }
+
+  .profile-toggle-row {
+    @apply flex items-center justify-between gap-4 rounded-2xl border border-[#008080]/25 px-5 py-4;
+    background: rgba(0, 128, 128, 0.08);
+  }
+
+  .profile-tip {
+    @apply rounded-3xl border border-[#008080]/25 p-5 lg:p-6;
+    background: linear-gradient(160deg, rgba(0, 128, 128, 0.14) 0%, rgba(0, 13, 13, 0.9) 100%);
+  }
+
+  .profile-section .input-base,
+  .profile-section textarea.input-base {
+    @apply border-[#008080]/35 bg-[#000d0d] text-white placeholder:text-white/40 focus:border-[#008080] focus:ring-[#008080]/25;
+  }
+
+  .data-table thead {
+    background: linear-gradient(90deg, rgba(0, 128, 128, 0.38) 0%, rgba(0, 51, 51, 0.22) 100%);
+    @apply border-b border-[#008080]/35 text-xs uppercase tracking-wide lg:text-sm;
+    color: #80d4d4;
+  }
+
+  .data-table th {
+    @apply px-4 py-3.5 font-semibold lg:px-5 lg:py-4;
+  }
+
+  .data-table tbody tr {
+    @apply border-b border-[#008080]/15 transition-colors;
+  }
+
+  .data-table tbody tr:hover {
+    background: rgba(0, 128, 128, 0.1);
+  }
+
+  .data-table tbody tr:last-child {
+    @apply border-b-0;
+  }
+
+  .data-table td {
+    @apply px-4 py-3.5 align-middle text-white/80 lg:px-5 lg:py-4;
+  }
+
+  .data-table td strong,
+  .data-table .cell-strong {
+    @apply font-medium text-white;
+  }
+
+  .data-table .cell-muted {
+    @apply text-xs text-white/50;
+  }
+
+  .data-table .table-pill {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold;
+    background: rgba(0, 128, 128, 0.22);
+    color: #b8e8e8;
+    border: 1px solid rgba(0, 128, 128, 0.35);
+  }
+
+  .data-table .table-pill--urgent {
+    background: rgba(220, 38, 38, 0.22);
+    color: #fecaca;
+    border-color: rgba(248, 113, 113, 0.4);
+  }
+
+  .data-table .table-pill--accent {
+    background: rgba(0, 128, 128, 0.28);
+    color: #80d4d4;
+    border-color: rgba(128, 212, 212, 0.35);
+  }
+
+  .data-table .btn-secondary {
+    @apply border-[#008080]/45 bg-[#008080]/15 text-white hover:border-[#008080]/65 hover:bg-[#008080]/28;
+  }
+
+  .data-table .btn-secondary.btn-danger {
+    @apply border-red-500/45 bg-red-950/40 text-red-200 hover:border-red-400/55 hover:bg-red-900/50;
+  }
+
+  .data-table .table-pill--gold {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fcd34d;
+    border-color: rgba(245, 158, 11, 0.4);
+  }
+
+  .data-table .table-progress {
+    @apply h-2 overflow-hidden rounded-full;
+    background: rgba(0, 128, 128, 0.18);
+  }
+
+  .data-table .table-progress-bar {
+    @apply h-full rounded-full;
+    background: linear-gradient(90deg, #008080 0%, #80d4d4 100%);
+  }
+
+  /* Modais — tema escuro padronizado */
+  .modal-panel {
+    @apply overflow-hidden rounded-2xl border border-[#008080]/35 shadow-2xl;
+    background: linear-gradient(165deg, #001a1a 0%, #000d0d 55%, #000808 100%);
+    color: #ffffff;
+  }
+
+  .modal-panel--urgent {
+    @apply border-red-500/40;
+  }
+
+  .modal-header {
+    @apply flex items-start justify-between gap-4 border-b border-[#008080]/25 px-6 pb-5 pt-6 lg:px-8 lg:pt-7;
+  }
+
+  .modal-body {
+    @apply px-6 py-6 text-base text-white/80 lg:px-8 lg:py-7;
+  }
+
+  .modal-footer {
+    @apply flex justify-end gap-3 border-t border-[#008080]/25 px-6 py-5 lg:px-8;
+  }
+
+  .modal-close {
+    @apply -mr-1 -mt-1 rounded-lg p-1.5 transition hover:bg-[#008080]/20;
+  }
+
+  .modal-panel label,
+  .modal-panel .field-label {
+    @apply text-white/70;
+  }
+
+  .modal-panel .input-base,
+  .modal-panel textarea,
+  .modal-panel select {
+    @apply border-[#008080]/35 bg-[#000d0d] text-white placeholder:text-white/40 focus:border-[#008080] focus:ring-[#008080]/25;
+  }
+
+  .modal-panel .btn-secondary {
+    @apply border-[#008080]/45 bg-[#008080]/15 text-white hover:border-[#008080]/65 hover:bg-[#008080]/28;
+  }
+
+  .modal-panel strong,
+  .modal-panel .text-emphasis {
+    @apply text-white;
+  }
+
+  .modal-panel .text-muted {
+    @apply text-white/55;
+  }
+
+  .modal-panel :is(.text-slate-900, .text-slate-800) {
+    @apply text-white;
+  }
+
+  .modal-panel :is(.text-slate-600, .text-slate-500, .text-slate-700) {
+    @apply text-white/60;
+  }
+
+  .modal-panel .text-slate-400 {
+    @apply text-white/40;
+  }
+
+  .modal-panel :is(.divide-slate-100, .divide-slate-200) > :not([hidden]) ~ :not([hidden]) {
+    border-color: rgba(0, 128, 128, 0.22);
+  }
+
+  .modal-panel :is(.bg-slate-50, .bg-slate-100),
+  .modal-panel .bg-slate-50\/60,
+  .modal-panel .bg-slate-50\/70 {
+    background: rgba(0, 128, 128, 0.12);
+  }
+
+  .modal-panel .bg-white {
+    background: rgba(0, 13, 13, 0.75);
+  }
+
+  .modal-panel :is(.border-slate-200, .border-slate-100, .border-slate-300) {
+    border-color: rgba(0, 128, 128, 0.28);
+  }
+
+  .modal-panel .bg-slate-200 {
+    background: rgba(0, 128, 128, 0.18);
+  }
+
+  .modal-panel .file\:bg-slate-200::file-selector-button {
+    background: rgba(0, 128, 128, 0.25);
+    color: #ffffff;
+  }
+
+  .orbit-icon {
+    color: #80d4d4;
+  }
+
+  .orbit-icon--emphasis {
+    color: #008080;
+  }
+
+  .status-pill--success {
+    @apply inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold capitalize;
+    background: rgba(0, 128, 128, 0.22);
+    color: #80d4d4;
+    border-color: rgba(0, 128, 128, 0.4);
+  }
+
+  .status-pill--pending {
+    @apply inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold capitalize;
+    background: rgba(0, 128, 128, 0.12);
+    color: #80d4d4;
+    border-color: rgba(128, 212, 212, 0.3);
+  }
+
+  .status-pill--danger {
+    @apply inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold capitalize;
+    background: rgba(220, 38, 38, 0.2);
+    color: #fecaca;
+    border-color: rgba(248, 113, 113, 0.35);
+  }
+
+  .data-table .cell-link {
+    @apply text-white underline decoration-[#008080]/60 underline-offset-2 transition hover:text-[#80d4d4];
+  }
+
+  .dashboard-hero > header {
+    @apply relative mb-6 flex-col items-start text-left;
+  }
+
+  .dashboard-hero > header > div:first-child {
+    @apply max-w-3xl space-y-2;
+  }
+
+  .dashboard-hero > header > div:last-child {
+    @apply absolute right-0 top-0;
+  }
+
+  .dashboard-panel {
+    @apply flex h-full min-h-0 flex-col rounded-3xl border border-[#008080]/30 p-5 lg:p-6;
+    background: linear-gradient(165deg, #001a1a 0%, #000d0d 55%, #000808 100%);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    color: #ffffff;
+  }
+
+  .dashboard-panel-header {
+    @apply mb-4 flex shrink-0 items-center justify-between gap-3 border-b border-[#008080]/25 pb-4;
+  }
+
+  .dashboard-panel-title {
+    @apply text-base font-semibold text-white lg:text-lg;
+  }
+
+  .dashboard-panel-link {
+    @apply text-xs font-semibold uppercase tracking-[0.14em] text-[#80d4d4] transition hover:text-white;
+  }
+
+  .dashboard-chart-slot {
+    @apply h-48 w-full lg:h-52;
+  }
+
+  .dashboard-chart-mini {
+    @apply mb-4 h-28 w-full shrink-0;
+  }
+
+  .dashboard-feed-list {
+    @apply min-h-0 flex-1 space-y-2 overflow-y-auto pr-1;
+    max-height: 340px;
+  }
+
+  .dashboard-feed-item {
+    @apply block rounded-xl border border-[#008080]/20 px-3 py-2.5 transition hover:border-[#008080]/40;
+    background: rgba(0, 128, 128, 0.06);
+  }
+
+  .dashboard-comunicado-list {
+    @apply min-h-0 flex-1 space-y-3 overflow-y-auto pr-1;
+    max-height: 320px;
+  }
+
+  .dashboard-comunicado-item {
+    @apply flex gap-3 rounded-xl border border-[#008080]/20 p-3 transition hover:border-[#008080]/40;
+    background: rgba(0, 128, 128, 0.06);
+  }
+
+  .dashboard-comunicado-thumb {
+    @apply size-16 shrink-0 overflow-hidden rounded-lg border border-[#008080]/20 object-cover;
+  }
+
+  .dashboard-comunicado-thumb-placeholder {
+    @apply grid size-16 shrink-0 place-items-center rounded-lg border border-[#008080]/20 text-[#80d4d4]/50;
+    background: rgba(0, 128, 128, 0.1);
+  }
+}
+
+/* ================================================================
+   Cosmic Parallax Background — CosmicParallaxBg component
+   ================================================================ */
+
+:root {
+  --animation-iteration: infinite;
+}
+
+/* Container principal — preenche o espaço do pai */
+.cosmic-parallax-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  perspective: 900px;
+  background: radial-gradient(ellipse at bottom, #0d1b2a 0%, #001a1a 40%, #000808 100%);
+  --planet-size: 580px;
+  --planet-bottom: -175px;
+  --orbit-w: min(94vw, 800px);
+  --orbit-h: 76px;
+  --orbit-lift: 28px;
+  --cosmic-text-y: 30%;
+}
+
+/* ── Estrelas (técnica box-shadow) ── */
+.cosmic-stars,
+.cosmic-stars-medium,
+.cosmic-stars-large,
+.cosmic-stars-bright {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  background: transparent;
+  animation-timing-function: linear;
+  animation-iteration-count: var(--animation-iteration);
+}
+
+.cosmic-stars,
+.cosmic-stars-medium,
+.cosmic-stars-large {
+  animation-name: animStarUp;
+}
+
+.cosmic-stars {
+  width: 1px;
+  height: 1px;
+}
+
+.cosmic-stars::after,
+.cosmic-stars-medium::after,
+.cosmic-stars-large::after,
+.cosmic-stars-bright::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: inherit;
+}
+
+.cosmic-stars::after {
+  top: var(--star-loop-y, 2000px);
+  left: var(--star-loop-x, 0);
+  width: 1px;
+  height: 1px;
+}
+
+.cosmic-stars--up {
+  animation-name: animStarUp;
+  animation-duration: 320s;
+  --star-loop-y: 2000px;
+  --star-loop-x: 0;
+}
+
+.cosmic-stars--down {
+  animation-name: animStarDown;
+  animation-duration: 420s;
+  --star-loop-y: -2000px;
+  --star-loop-x: 0;
+}
+
+.cosmic-stars-medium {
+  width: 2px;
+  height: 2px;
+}
+
+.cosmic-stars-medium::after {
+  top: var(--star-loop-y, 2000px);
+  left: var(--star-loop-x, 0);
+  width: 2px;
+  height: 2px;
+}
+
+.cosmic-stars--left {
+  animation-name: animStarLeft;
+  animation-duration: 540s;
+  --star-loop-y: 0;
+  --star-loop-x: 2000px;
+}
+
+.cosmic-stars--right {
+  animation-name: animStarRight;
+  animation-duration: 360s;
+  --star-loop-y: 0;
+  --star-loop-x: -2000px;
+}
+
+.cosmic-stars-large {
+  width: 3px;
+  height: 3px;
+}
+
+.cosmic-stars-large::after {
+  top: var(--star-loop-y, 2000px);
+  left: var(--star-loop-x, 0);
+  width: 3px;
+  height: 3px;
+}
+
+.cosmic-stars--up-slow {
+  animation-name: animStarUp;
+  animation-duration: 900s;
+  --star-loop-y: 2000px;
+  --star-loop-x: 0;
+}
+
+.cosmic-stars--down-slow {
+  animation-name: animStarDown;
+  animation-duration: 680s;
+  --star-loop-y: -2000px;
+  --star-loop-x: 0;
+}
+
+/* Poucas estrelas brilhantes — direções e velocidades distintas */
+.cosmic-stars-bright {
+  width: 3px;
+  height: 3px;
+  filter: brightness(2);
+  z-index: 1;
+}
+
+.cosmic-stars-bright::after {
+  top: var(--star-loop-y, 2000px);
+  left: var(--star-loop-x, 0);
+  width: 3px;
+  height: 3px;
+}
+
+.cosmic-stars-bright--up {
+  animation-name: animStarUp;
+  animation-duration: 240s;
+  --star-loop-y: 2000px;
+  --star-loop-x: 0;
+}
+
+.cosmic-stars-bright--down {
+  animation-name: animStarDown;
+  animation-duration: 190s;
+  filter: brightness(2.15);
+  --star-loop-y: -2000px;
+  --star-loop-x: 0;
+}
+
+.cosmic-stars-bright--left {
+  animation-name: animStarLeft;
+  animation-duration: 170s;
+  filter: brightness(2.15);
+  --star-loop-y: 0;
+  --star-loop-x: 2000px;
+}
+
+.cosmic-stars-bright--right {
+  animation-name: animStarRight;
+  animation-duration: 140s;
+  filter: brightness(2.4);
+  --star-loop-y: 0;
+  --star-loop-x: -2000px;
+}
+
+/* Estrelas cadentes — rápidas com rastro */
+.shooting-stars-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.shooting-star {
+  position: absolute;
+  width: var(--shoot-length, 42px);
+  height: 1px;
+  opacity: 0;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 35%,
+    rgba(255, 255, 255, 0.7) 88%,
+    #fff 100%
+  );
+  box-shadow:
+    0 0 4px 0.5px rgba(255, 255, 255, 0.55),
+    0 0 8px 1px rgba(190, 230, 255, 0.22);
+  transform-origin: 100% 50%;
+  transform: rotate(var(--shoot-angle, 45deg)) translate3d(0, 0, 0);
+  animation: shootingStar var(--shoot-cycle, 80s) linear infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes shootingStar {
+  0%, 89% {
+    opacity: 0;
+    transform: rotate(var(--shoot-angle, 45deg)) translate3d(0, 0, 0) scaleX(0.2);
+  }
+  89.5% {
+    opacity: 0.6;
+    transform: rotate(var(--shoot-angle, 45deg)) translate3d(0, 0, 0) scaleX(0.55);
+  }
+  90% {
+    opacity: 1;
+  }
+  92.5% {
+    opacity: 1;
+    transform: rotate(var(--shoot-angle, 45deg)) translate3d(var(--shoot-distance, 165vmax), 0, 0) scaleX(1);
+  }
+  94%, 100% {
+    opacity: 0;
+    transform: rotate(var(--shoot-angle, 45deg)) translate3d(calc(var(--shoot-distance, 165vmax) * 1.02), 0, 0) scaleX(0.55);
+  }
+}
+
+/* ── Órbita e detritos ── */
+.orbit-layer {
+  position: absolute;
+  bottom: calc(var(--planet-bottom) + var(--planet-size) / 2 - var(--orbit-h) / 2 + var(--orbit-lift));
+  left: 50%;
+  width: var(--orbit-w);
+  height: var(--orbit-h);
+  transform: translateX(-50%) rotateX(68deg);
+  transform-origin: center center;
+  pointer-events: none;
+}
+
+.orbit-layer-back {
+  z-index: 2;
+  clip-path: inset(0 0 50% 0);
+}
+
+.orbit-layer-front {
+  z-index: 4;
+  clip-path: inset(50% 0 0 0);
+}
+
+.orbit-track {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 8px solid rgba(90, 195, 195, 0.48);
+  background: transparent;
+  box-shadow:
+    0 0 12px rgba(100, 210, 210, 0.22),
+    0 0 28px rgba(0, 160, 160, 0.14);
+}
+
+.orbit-track::before {
+  content: '';
+  position: absolute;
+  inset: -3px -8px;
+  border-radius: 50%;
+  border: 3px solid rgba(120, 215, 215, 0.28);
+  filter: blur(3px);
+  opacity: 0.9;
+}
+
+.orbit-track::after {
+  content: '';
+  position: absolute;
+  inset: 4px 10px;
+  border-radius: 50%;
+  border: 2.5px solid rgba(130, 220, 220, 0.18);
+  background: transparent;
+  filter: blur(1px);
+  opacity: 0.85;
+}
+
+.orbit-track-front {
+  border: 8px solid rgba(110, 215, 215, 0.55);
+  box-shadow:
+    0 0 14px rgba(130, 225, 225, 0.28),
+    0 0 32px rgba(0, 175, 175, 0.16);
+}
+
+.orbit-track-front::before {
+  border-color: rgba(150, 230, 230, 0.32);
+  filter: blur(4px);
+}
+
+.orbit-track-front::after {
+  border-color: rgba(160, 235, 235, 0.22);
+  filter: blur(1.5px);
+}
+
+.orbit-debris {
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(calc(-50% + var(--debris-ox, 0px)), calc(-50% + var(--debris-oy, 0px)))
+    scale(var(--debris-scale, 1.35));
+}
+
+.orbit-debris--dim {
+  background: rgba(70, 110, 110, 0.55);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+}
+
+.orbit-debris--mid {
+  background: rgba(120, 175, 175, 0.7);
+  box-shadow: 0 0 4px rgba(100, 160, 160, 0.25);
+}
+
+.orbit-debris--bright {
+  background: rgba(170, 220, 220, 0.85);
+  box-shadow: 0 0 5px rgba(140, 200, 200, 0.35);
+}
+
+/* ── Planeta (earth) ── */
+#earth {
+  position: absolute;
+  bottom: var(--planet-bottom);
+  left: 50%;
+  z-index: 3;
+  transform: translateX(-50%);
+  width: var(--planet-size);
+  height: var(--planet-size);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #002a2a 0%, #000d0d 55%, #000000 100%);
+  box-shadow:
+    0 0 65px rgba(0, 128, 128, 0.2),
+    inset 0 0 100px rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 128, 128, 0.18);
+}
+
+/* ── Título ── */
+#title {
+  position: absolute;
+  top: var(--cosmic-text-y);
+  left: 50%;
+  z-index: 5;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-sans);
+  font-size: clamp(3.2rem, 9vw, 6rem);
+  font-weight: 700;
+  letter-spacing: 0.38em;
+  color: #ffffff;
+  text-shadow:
+    0 0 40px rgba(128, 212, 212, 0.65),
+    0 0 100px rgba(0, 128, 128, 0.4);
+  white-space: nowrap;
+  text-align: center;
+  margin-top: -2rem;
+}
+
+/* ── Subtítulo ── */
+#subtitle {
+  position: absolute;
+  top: var(--cosmic-text-y);
+  left: 50%;
+  z-index: 5;
+  transform: translate(-50%, -50%);
+  margin-top: 3.2rem;
+  display: flex;
+  gap: 1.6rem;
+  font-family: var(--font-sans);
+  font-size: clamp(0.9rem, 2vw, 1.25rem);
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  color: rgba(128, 212, 212, 0.85);
+  white-space: nowrap;
+  text-align: center;
+}
+
+#subtitle span {
+  display: inline-block;
+  opacity: 0;
+}
+
+/* Entrada escalonada das partes do subtítulo.
+   Cada parte entra com atraso crescente, produzindo o efeito de cascata.
+   Suporta até 4 partes; a 5ª em diante reaproveita o atraso da 4ª. */
+.subtitle-part-1 {
+  animation: animSubtitleIn1 8s ease-in-out var(--animation-iteration);
+}
+.subtitle-part-2 {
+  animation: animSubtitleIn2 8s ease-in-out var(--animation-iteration);
+}
+.subtitle-part-3 {
+  animation: animSubtitleIn3 8s ease-in-out var(--animation-iteration);
+}
+.subtitle-part-4,
+.subtitle-part-5,
+.subtitle-part-6 {
+  animation: animSubtitleIn4 8s ease-in-out var(--animation-iteration);
+}
+
+/* separador · entre partes */
+#subtitle span + span::before {
+  content: '·';
+  margin-right: 1.2rem;
+  color: rgba(0, 128, 128, 0.5);
+}
+
+/* ── Keyframes ── */
+@keyframes animStarUp {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, -2000px, 0); }
+}
+
+@keyframes animStarDown {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, 2000px, 0); }
+}
+
+@keyframes animStarLeft {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-2000px, 0, 0); }
+}
+
+@keyframes animStarRight {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(2000px, 0, 0); }
+}
+
+@keyframes animSubtitleIn1 {
+  0% {
+    transform: translateY(-26px);
+    opacity: 0;
+  }
+  30%, 80% {
+    letter-spacing: 0.32em;
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  92%, 100% {
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+}
+
+@keyframes animSubtitleIn2 {
+  0%, 15% {
+    transform: translateY(-26px);
+    opacity: 0;
+  }
+  35%, 80% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  92%, 100% {
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+}
+
+@keyframes animSubtitleIn3 {
+  0%, 25% {
+    transform: translateY(-26px);
+    opacity: 0;
+  }
+  45%, 80% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  92%, 100% {
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+}
+
+@keyframes animSubtitleIn4 {
+  0%, 35% {
+    transform: translateY(-26px);
+    opacity: 0;
+  }
+  55%, 80% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  92%, 100% {
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+}
+
+/* ================================================================
+   Acessibilidade — respeitar "reduzir movimento" do sistema.
+   O fundo cósmico tem movimento contínuo (estrelas, órbita, texto),
+   que pode causar desconforto em usuários com sensibilidade
+   vestibular. Aqui as animações param e o texto fica legível e
+   estático, preservando toda a identidade visual.
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .cosmic-parallax-container *,
+  .cosmic-parallax-container *::before,
+  .cosmic-parallax-container *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Sem animação, as partes do subtítulo precisam de opacidade explícita,
+     pois o estado padrão delas é opacity: 0. */
+  #subtitle span {
+    opacity: 1;
+  }
+
+  .shooting-star {
+    display: none;
+  }
+}
