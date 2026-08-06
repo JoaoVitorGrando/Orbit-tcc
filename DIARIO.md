@@ -73,6 +73,59 @@ autor, sem necessidade de consulta.
 **Definição de pronto:** o teste de defesa em profundidade passa — com o Global Scope
 desabilitado, a RLS ainda barra o acesso entre organizações.
 
+### 06/08 — Sprint 1 — Dia 1
+
+**Entregas do dia:**
+
+- Autenticação por token (Laravel Sanctum): `POST /api/v1/login`,
+  `POST /api/v1/logout`, `GET /api/v1/me`.
+- Middleware `EnsureUserHasRole`, registrado com o alias `role`, aplicável como
+  `role:admin` ou `role:gestor,admin`.
+- Banco de teste dedicado (`orbit_rh_test`) e arquivo `.env.testing`.
+- Factories de `Organization`, `Branch` e estados de papel em `UserFactory`.
+- 9 testes automatizados, 17 asserções, todos passando. Inclui o primeiro dos sete
+  cenários obrigatórios: colaborador recebe 403 em rota restrita a gestor.
+- Removidos os dois arquivos de teste de exemplo gerados pelo framework.
+
+**Impedimentos:**
+
+1. `User::createToken()` inexistente — o model não havia recebido o trait
+   `HasApiTokens` do Sanctum, que normalmente é adicionado por `install:api`.
+   Resolvido acrescentando o trait.
+2. Teste de logout falhando por motivo não óbvio: dentro de um mesmo método de
+   teste, o guard de autenticação permanece em cache entre requisições HTTP
+   sucessivas, de modo que a segunda chamada não refletia a revogação do token.
+   O comportamento é particularidade do ambiente de teste, não do sistema. O teste
+   foi reescrito para verificar diretamente a ausência do registro na tabela
+   `personal_access_tokens`, que é o efeito que realmente importa.
+
+**Decisão técnica tomada (e justificativa):**
+
+- **Sanctum em modo token, não cookie de sessão.** Front-end e API operam em
+  origens distintas em desenvolvimento (portas 5173 e 8000); o modo cookie exigiria
+  configuração adicional de CORS e CSRF sem benefício correspondente.
+- **Middleware de papel próprio, sem pacote externo.** Pacotes de RBAC como o
+  Spatie Permission resolvem papéis dinâmicos e permissões granulares — problema
+  que este sistema não tem, pois os três papéis são fixos por requisito (RF11). Um
+  middleware de poucas linhas cobre o caso e permanece integralmente explicável.
+- **Remoção das conexões MySQL, MariaDB e SQLite de `config/database.php`.** O
+  projeto é PostgreSQL-only por decisão de arquitetura (a RLS não existe nos
+  demais). Manter conexões alternativas configuradas sugeriria uma portabilidade
+  que o sistema não possui.
+
+**Questões em aberto:**
+
+- Executar a suíte em PHP 8.5 gera avisos de código obsoleto originados no próprio
+  Laravel 11 (`PDO::MYSQL_ATTR_SSL_CA`, em
+  `vendor/laravel/framework/config/database.php`). Os testes passam, mas o PHPUnit
+  marca cada um com `DEPR`, o que reduz a legibilidade da saída. Tentativas de
+  filtrar via `restrictDeprecations` (recurso do PHPUnit 11, indisponível na versão
+  10.5 em uso) e via `error_reporting` não surtiram efeito. Registrado como
+  limitação conhecida de ambiente; a solução definitiva seria executar sob PHP 8.3
+  ou 8.4, versões alvo do Laravel 11.
+
+---
+
 ### Retrospectiva da sprint
 
 **O que funcionou:**
