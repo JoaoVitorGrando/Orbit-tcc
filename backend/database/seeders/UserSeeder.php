@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
 
         // Administradores — sem branch_id: supervisionam todas as filiais
         // da própria organização, não uma filial específica.
-        User::create([
+        $this->criarUsuario([
             'organization_id' => $padaria->id,
             'branch_id' => null,
             'name' => 'Administrador Geral',
@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        User::create([
+        $this->criarUsuario([
             'organization_id' => $vetta->id,
             'branch_id' => null,
             'name' => 'Administradora Vetta',
@@ -51,7 +51,7 @@ class UserSeeder extends Seeder
         ]);
 
         // Gestores — um por filial.
-        User::create([
+        $this->criarUsuario([
             'organization_id' => $padaria->id,
             'branch_id' => $matrizCentro->id,
             'name' => 'Rafael Andrade Monteiro',
@@ -60,7 +60,7 @@ class UserSeeder extends Seeder
             'role' => 'gestor',
         ]);
 
-        User::create([
+        $this->criarUsuario([
             'organization_id' => $padaria->id,
             'branch_id' => $filialZonaSul->id,
             'name' => 'Sabrina Lopes Guimarães',
@@ -69,7 +69,7 @@ class UserSeeder extends Seeder
             'role' => 'gestor',
         ]);
 
-        User::create([
+        $this->criarUsuario([
             'organization_id' => $vetta->id,
             'branch_id' => $matrizVetta->id,
             'name' => 'Thiago Machado Pereira',
@@ -104,7 +104,7 @@ class UserSeeder extends Seeder
         ];
 
         foreach ($colaboradoresMatrizCentro as $email => $nome) {
-            User::create([
+            $this->criarUsuario([
                 'organization_id' => $padaria->id,
                 'branch_id' => $matrizCentro->id,
                 'name' => $nome,
@@ -115,7 +115,7 @@ class UserSeeder extends Seeder
         }
 
         foreach ($colaboradoresFilialZonaSul as $email => $nome) {
-            User::create([
+            $this->criarUsuario([
                 'organization_id' => $padaria->id,
                 'branch_id' => $filialZonaSul->id,
                 'name' => $nome,
@@ -126,7 +126,7 @@ class UserSeeder extends Seeder
         }
 
         foreach ($colaboradoresVetta as $email => $nome) {
-            User::create([
+            $this->criarUsuario([
                 'organization_id' => $vetta->id,
                 'branch_id' => $matrizVetta->id,
                 'name' => $nome,
@@ -135,5 +135,28 @@ class UserSeeder extends Seeder
                 'role' => 'colaborador',
             ]);
         }
+    }
+
+    /**
+     * `role` e `organization_id` não são atribuíveis em massa no model
+     * (proteção contra escalação de privilégio por payload de requisição).
+     * Aqui a atribuição é explícita e o contexto é confiável: seeder é
+     * código administrativo, executado por quem tem acesso ao servidor,
+     * nunca a partir de entrada de usuário.
+     */
+    private function criarUsuario(array $dados): User
+    {
+        $user = new User([
+            'branch_id' => $dados['branch_id'],
+            'name' => $dados['name'],
+            'email' => $dados['email'],
+            'password' => $dados['password'],
+        ]);
+
+        $user->assignToOrganization($dados['organization_id']);
+        $user->assignRole($dados['role']);
+        $user->save();
+
+        return $user;
     }
 }

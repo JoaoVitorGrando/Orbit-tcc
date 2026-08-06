@@ -50,7 +50,11 @@ return [
     |
     */
 
-    'expiration' => null,
+    // 480 minutos = 8 horas. O padrão do Sanctum é `null`, ou seja, token
+    // sem prazo de validade: uma credencial vazada permaneceria válida
+    // indefinidamente. Oito horas cobrem uma jornada de trabalho, que é o
+    // padrão de uso esperado do sistema.
+    'expiration' => 480,
 
     /*
     |--------------------------------------------------------------------------
