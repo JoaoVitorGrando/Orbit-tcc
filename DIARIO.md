@@ -83,9 +83,14 @@ desabilitado, a RLS ainda barra o acesso entre organizações.
   `role:admin` ou `role:gestor,admin`.
 - Banco de teste dedicado (`orbit_rh_test`) e arquivo `.env.testing`.
 - Factories de `Organization`, `Branch` e estados de papel em `UserFactory`.
-- 9 testes automatizados, 17 asserções, todos passando. Inclui o primeiro dos sete
-  cenários obrigatórios: colaborador recebe 403 em rota restrita a gestor.
 - Removidos os dois arquivos de teste de exemplo gerados pelo framework.
+- **Endurecimento de segurança**, a partir de revisão do código escrito no mesmo dia:
+  campos de privilégio (`role`, `organization_id`) retirados da atribuição em massa;
+  limite de tentativas no login; expiração de token definida; `APP_DEBUG` documentado
+  no `.env.example`.
+- 15 testes automatizados, 31 asserções, todos passando. Inclui o primeiro dos sete
+  cenários obrigatórios (colaborador recebe 403 em rota restrita a gestor) e seis
+  testes de endurecimento que simulam tentativas concretas de ataque.
 
 **Impedimentos:**
 
@@ -112,6 +117,32 @@ desabilitado, a RLS ainda barra o acesso entre organizações.
   projeto é PostgreSQL-only por decisão de arquitetura (a RLS não existe nos
   demais). Manter conexões alternativas configuradas sugeriria uma portabilidade
   que o sistema não possui.
+- **Campos de privilégio fora do `$fillable`.** `role` e `organization_id` passaram a
+  exigir atribuição explícita (`assignRole`, `assignToOrganization`). Sem isso, um
+  endpoint de edição de perfil que repassasse o corpo da requisição ao model
+  permitiria escalação de privilégio e migração para outra organização — esta última
+  contornando o isolamento multitenant por dentro, sem depender de falha do Global
+  Scope ou da RLS. A proteção reside no model, não no controller, justamente para
+  não depender da disciplina de quem escreve cada endpoint.
+
+**Revisão de segurança realizada:**
+
+Revisão conduzida sobre o código produzido no próprio dia, motivada pela expectativa
+de teste de intrusão por terceiro. Quatro correções aplicadas e seis testes escritos,
+cada um reproduzindo uma tentativa concreta de ataque:
+
+| Vetor | Situação anterior | Correção |
+|---|---|---|
+| Escalação de privilégio por atribuição em massa | `role` e `organization_id` em `$fillable` | Removidos; atribuição explícita e validada |
+| Migração não autorizada entre organizações | idem | idem |
+| Força bruta no login | Tentativas ilimitadas | `throttle:5,1` — 5 por minuto, por IP |
+| Token de acesso sem prazo | `'expiration' => null` | 480 minutos (8 horas) |
+| Enumeração de contas pelo login | Já correto, sem garantia | Teste comparando as respostas |
+| Vazamento de informação por rastreamento de pilha | `APP_DEBUG=true` sem alerta | Documentado no `.env.example` |
+
+O teste de escalação de privilégio exercita o pior caso deliberadamente: registra um
+endpoint que repassa o corpo inteiro da requisição ao model — a forma mais descuidada
+de escrever a operação — e verifica que, ainda assim, o papel não é alterado.
 
 **Questões em aberto:**
 
