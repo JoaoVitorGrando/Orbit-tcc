@@ -2,24 +2,31 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToOrganization;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Branch extends Model
 {
-    use HasFactory;
+    use BelongsToOrganization, HasFactory;
 
     protected $fillable = [
         'organization_id',
         'name',
     ];
 
-    public function organization(): BelongsTo
+    /**
+     * A filial é a própria unidade de segregação: não faz sentido
+     * filtrá-la por `branch_id`, coluna que ela não possui. O isolamento
+     * por organização continua aplicado.
+     */
+    protected static function aplicaEscopoDeFilial(): bool
     {
-        return $this->belongsTo(Organization::class);
+        return false;
     }
+
+    // A relação `organization()` vem do trait BelongsToOrganization.
 
     public function users(): HasMany
     {

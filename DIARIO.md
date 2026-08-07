@@ -157,6 +157,62 @@ de escrever a operação — e verifica que, ainda assim, o papel não é altera
 
 ---
 
+### 07/08 — Sprint 1 — Dia 2
+
+**Entregas do dia:**
+
+- `TenantContext`: objeto singleton que guarda organização, filial e papel da
+  requisição em curso.
+- `ResolveTenantContext`: middleware que o preenche a partir do usuário autenticado,
+  registrado com o alias `tenant`.
+- `OrganizationScope` e `BranchScope`: escopos globais do Eloquent que filtram toda
+  consulta automaticamente.
+- Trait `BelongsToOrganization`, que aplica ambos os escopos, preenche
+  `organization_id` e `branch_id` na criação de registros, e expõe
+  `semEscopoDeFilial()` para a exceção do RF07.
+- Trait aplicado a `User` e `Branch`.
+- 8 testes novos, cobrindo dois dos sete cenários obrigatórios: segregação por
+  organização e segregação por filial. Suíte total: 23 testes, 45 asserções.
+
+**Impedimentos:**
+
+Nenhum. A camada foi implementada e testada em um dia, contra os dois previstos
+no plano.
+
+**Decisão técnica tomada (e justificativa):**
+
+- **Contexto de tenant em objeto próprio, não consulta direta a `auth()`.** Três
+  razões: funciona fora do ciclo HTTP (comandos, filas, testes); separa persistência
+  de autenticação; e, decisiva, torna as duas camadas de isolamento independentes
+  entre si. Global Scope e RLS lerão a mesma fonte, de modo que desativar um não
+  afeta o outro — condição para que o teste de defesa em profundidade seja
+  conclusivo.
+- **Escopo de filial automático, e não filtro manual por endpoint.** O argumento que
+  justifica filtrar organização automaticamente ("não é seguro depender de alguém
+  lembrar") vale igualmente para filial. Com o filtro automático, o cenário
+  obrigatório "segregação por filial" comprova uma propriedade estrutural do
+  sistema; com filtro manual, comprovaria apenas que um endpoint específico foi
+  escrito com cuidado.
+- **Custo assumido:** o escopo de filial depende do papel de quem consulta (não se
+  aplica ao administrador), o que o torna mais difícil de raciocinar. Mitigado
+  isolando a condição em `TenantContext::isRestrictedToBranch()` e cobrindo os três
+  papéis por teste.
+- **Ausência de contexto não filtra.** Em seeder ou comando de terminal, o escopo
+  não se aplica. É decisão consciente: nesses contextos o acesso amplo é legítimo.
+  Também é exatamente a razão de a segunda camada existir e ser independente desta.
+- **Preenchimento automático na criação.** O trait define `organization_id` e
+  `branch_id` ao criar um registro. Sem isso, uma linha poderia nascer órfã de
+  tenant — invisível para todos ou, pior, visível para quem não deveria.
+
+**Questões em aberto:**
+
+- A remoção explícita do escopo de filial (`semEscopoDeFilial()`) já está testada
+  quanto a não atravessar organizações, mas ainda não há restrição de papel sobre
+  quem pode invocá-la. O RF07 determina acesso restrito a Administrador e Gestor;
+  essa verificação será aplicada quando o requisito for implementado, na Sprint 3.
+
+---
+
 ### Retrospectiva da sprint
 
 **O que funcionou:**

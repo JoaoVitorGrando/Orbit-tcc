@@ -10,7 +10,10 @@ Route::prefix('v1')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])
         ->middleware('throttle:5,1');
 
-    Route::middleware('auth:sanctum')->group(function () {
+    // `tenant` roda depois de `auth:sanctum`: precisa do usuário já
+    // autenticado para descobrir a organização, e precisa estar definido
+    // antes de qualquer consulta ao banco.
+    Route::middleware(['auth:sanctum', 'tenant'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [AuthController::class, 'me']);
     });
